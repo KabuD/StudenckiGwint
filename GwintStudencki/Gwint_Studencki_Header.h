@@ -5,6 +5,7 @@
 #include <SDL_image.h>
 #include <stdio.h>
 #include <string>
+#include <vector>
 using namespace std;
 
 const int WINDOW_WIDTH = 1366;
