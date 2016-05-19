@@ -11,3 +11,7 @@ Card::Card(string _path, int _points, int _ability, int _svp)
 	ability = _ability;
 	svp = _svp;
 }
+
+void Card::Print()
+{
+}

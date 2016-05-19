@@ -1,10 +1,10 @@
 #include "Gwint_Studencki_Header.h"
-
-
+#include "Game_Header.h"
+Game core;
 int main( int argc, char* args[] )
 {
 	//Start up SDL and create window
-	if( !init() )
+	if( !core.init() )
 	{
 		printf( "Failed to initialize!\n" );
 		system("PAUSE");
@@ -12,7 +12,7 @@ int main( int argc, char* args[] )
 	else
 	{
 		//Load media
-		if( !loadMedia() )
+		if( !core.loadMedia() )
 		{
 			printf( "Failed to load media!\n" );
 			system("PAUSE");
@@ -37,12 +37,12 @@ int main( int argc, char* args[] )
 						quit = true;
 					}
 				}
-				applythepng();
+				core.applythepng();
 			}
 		}
 	}
 	//Free resources and close SDL
-	close();
+	core.close();
 
 	return 0;
 }
