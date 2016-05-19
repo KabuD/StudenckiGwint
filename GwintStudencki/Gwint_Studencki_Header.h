@@ -3,15 +3,15 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
-#include <stdio.h>
+#include <iostream>
 #include <string>
 #include <vector>
 using namespace std;
 
+const int WINDOW_WIDTH=1400;
+const int WINDOW_HEIGHT=866;
+const int WINDOW_x=200;
+const int WINDOW_y=-900;
 
-bool init();
-bool loadMedia();
-void close();
-void applythepng();
 
 #endif

@@ -79,13 +79,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Card_Func.cpp" />
+    <ClCompile Include="Cards_Func.cpp" />
     <ClCompile Include="Game_Func.cpp" />
     <ClCompile Include="Gwint_Studencki.cpp" />
     <ClCompile Include="Gwint_Studencki_Func.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cards_Header.h" />
+    <ClInclude Include="Deck_Header.h" />
     <ClInclude Include="Game_Header.h" />
     <ClInclude Include="Gwint_Studencki_Header.h" />
   </ItemGroup>
