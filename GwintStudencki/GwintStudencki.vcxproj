@@ -87,6 +87,7 @@
     <ClInclude Include="Cards_Header.h" />
     <ClInclude Include="Deck_Header.h" />
     <ClInclude Include="Gwint_Studencki_Header.h" />
+    <ClInclude Include="Logic_Header.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Karty\cwaniak.png" />

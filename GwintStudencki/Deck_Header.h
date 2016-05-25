@@ -84,10 +84,6 @@ public:
 		Teachers.push_back(new Cards(74, "karty/egzaminkomisyjny.png", 4, TYPE_RANGED, TEACHERS_TEAM, ABILITY_SPY));
 		Teachers.push_back(new Cards(75, "karty/prowadzacy.png", 4, TYPE_MELEE, TEACHERS_TEAM, ABILITY_NONE));
 		Teachers.push_back(new Cards(76, "karty/egzaminustny.png", 6, TYPE_RANGED, TEACHERS_TEAM, ABILITY_NONE));
-
-
-
-
 	}
 	void Draw()
 	{
@@ -100,6 +96,11 @@ public:
 			a->Draw(renderer);
 		}
 		
+	}
+	~Deck()
+	{
+		Students.clear();
+		Teachers.clear();
 	}
 };
 

@@ -24,3 +24,9 @@ void Cards::Draw(SDL_Renderer *_renderer)
 	}
 	SDL_RenderCopy(_renderer, card_image, NULL, &card_rect);
 }
+
+void Cards::changePos(double _x, double _y)
+{
+	card_rect.x = _x;
+	card_rect.y = _y;
+}

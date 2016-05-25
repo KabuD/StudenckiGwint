@@ -35,6 +35,9 @@
     <ClInclude Include="Deck_Header.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Logic_Header.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="tekstura.png">

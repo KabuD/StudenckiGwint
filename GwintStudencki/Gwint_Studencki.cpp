@@ -3,6 +3,9 @@
 
 int main( int argc, char* args[] )
 {
+	srand(time(NULL));
+//TODO LOSOWANIE KART
+
 	SDL_Init(SDL_INIT_VIDEO);
 	SDL_Window* window = NULL;
 	window = SDL_CreateWindow("Gwint Studencki", WINDOW_x, WINDOW_y, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
@@ -29,7 +32,6 @@ int main( int argc, char* args[] )
 	{
 		SDL_PollEvent(mainEvent);
 		SDL_RenderClear(renderer);
-
 		SDL_RenderCopy(renderer, background, NULL, &background_rect);
 		oneandonly.Draw();
 
