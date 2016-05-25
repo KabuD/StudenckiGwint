@@ -21,9 +21,6 @@
     <ClCompile Include="Gwint_Studencki_Func.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Game_Func.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Cards_Func.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -35,15 +32,129 @@
     <ClInclude Include="Cards_Header.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Game_Header.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Deck_Header.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="tekstura.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\cwaniak.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\drinz.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\egzamin.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\egzaminkomisyjny.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\egzaminpoprawkowy.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\egzaminustny.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\etrapez.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\imprezowicz.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\kolokwium.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\kolokwiumpoprawkowe.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\korepetytor.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\latwykolos.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\matlab.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\nawalony.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\notatki.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\obowiazkowezadania.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\odpowiedzustna.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\pomocnikwykladowcy.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\pomocnygrzes.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\projektzinfy.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\prostecwiczenia.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\prowadzacy.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\redbull.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\sesja.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\slabywyklad.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\sprawozdanie.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\starosta.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\student.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\tenodprzekladania.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\tenodpytan.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\trudnymaterial.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\trudnyprzyklad.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\typowystudent.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\ujemnepunkty.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\upal.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\wejsciowka.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\wkurzonyprowadzacy.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\wscieklystudent.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Karty\zzeszlychlat.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

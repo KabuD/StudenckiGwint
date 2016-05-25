@@ -10,8 +10,8 @@ using namespace std;
 
 const int WINDOW_WIDTH=1400;
 const int WINDOW_HEIGHT=866;
-const int WINDOW_x=200;
-const int WINDOW_y=-900;
+const int WINDOW_x=0;
+const int WINDOW_y=0;
 
 
 #endif

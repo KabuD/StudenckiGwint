@@ -1,5 +1,4 @@
 #include "Gwint_Studencki_Header.h"
-#include "Game_Header.h"
 #include "Deck_Header.h"
 
 int main( int argc, char* args[] )

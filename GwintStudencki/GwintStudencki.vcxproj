@@ -80,17 +80,54 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Cards_Func.cpp" />
-    <ClCompile Include="Game_Func.cpp" />
     <ClCompile Include="Gwint_Studencki.cpp" />
     <ClCompile Include="Gwint_Studencki_Func.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cards_Header.h" />
     <ClInclude Include="Deck_Header.h" />
-    <ClInclude Include="Game_Header.h" />
     <ClInclude Include="Gwint_Studencki_Header.h" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Karty\cwaniak.png" />
+    <Image Include="Karty\drinz.png" />
+    <Image Include="Karty\egzamin.png" />
+    <Image Include="Karty\egzaminkomisyjny.png" />
+    <Image Include="Karty\egzaminpoprawkowy.png" />
+    <Image Include="Karty\egzaminustny.png" />
+    <Image Include="Karty\etrapez.png" />
+    <Image Include="Karty\imprezowicz.png" />
+    <Image Include="Karty\kolokwium.png" />
+    <Image Include="Karty\kolokwiumpoprawkowe.png" />
+    <Image Include="Karty\korepetytor.png" />
+    <Image Include="Karty\latwykolos.png" />
+    <Image Include="Karty\matlab.png" />
+    <Image Include="Karty\nawalony.png" />
+    <Image Include="Karty\notatki.png" />
+    <Image Include="Karty\obowiazkowezadania.png" />
+    <Image Include="Karty\odpowiedzustna.png" />
+    <Image Include="Karty\pomocnikwykladowcy.png" />
+    <Image Include="Karty\pomocnygrzes.png" />
+    <Image Include="Karty\projektzinfy.png" />
+    <Image Include="Karty\prostecwiczenia.png" />
+    <Image Include="Karty\prowadzacy.png" />
+    <Image Include="Karty\redbull.png" />
+    <Image Include="Karty\sesja.png" />
+    <Image Include="Karty\slabywyklad.png" />
+    <Image Include="Karty\sprawozdanie.png" />
+    <Image Include="Karty\starosta.png" />
+    <Image Include="Karty\student.png" />
+    <Image Include="Karty\tenodprzekladania.png" />
+    <Image Include="Karty\tenodpytan.png" />
+    <Image Include="Karty\trudnymaterial.png" />
+    <Image Include="Karty\trudnyprzyklad.png" />
+    <Image Include="Karty\typowystudent.png" />
+    <Image Include="Karty\ujemnepunkty.png" />
+    <Image Include="Karty\upal.png" />
+    <Image Include="Karty\wejsciowka.png" />
+    <Image Include="Karty\wkurzonyprowadzacy.png" />
+    <Image Include="Karty\wscieklystudent.png" />
+    <Image Include="Karty\zzeszlychlat.png" />
     <Image Include="tekstura.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
