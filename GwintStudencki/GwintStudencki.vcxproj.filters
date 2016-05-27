@@ -18,13 +18,13 @@
     <ClCompile Include="Gwint_Studencki.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Gwint_Studencki_Func.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Cards_Func.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Deck_Func.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Logic_Func.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -36,6 +36,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Deck_Header.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Logic_Header.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

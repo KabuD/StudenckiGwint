@@ -28,18 +28,6 @@ void Cards::drawCard(SDL_Renderer *_renderer)
 {
 	SDL_RenderCopy(_renderer, card_image, NULL, &card_rect);
 }
-int Cards::getIndex()
-{
-	return index;
-}
-int Cards::getPoint()
-{
-	return points;
-}
-string Cards::getName()
-{
-	return path;
-}
 void Cards::changePosInRow(double _x)
 {
 	card_rect.x = _x;
@@ -47,4 +35,20 @@ void Cards::changePosInRow(double _x)
 void Cards::changeRow(double _y)
 {
 	card_rect.y = _y;
+}
+int Cards::getX()
+{
+	return card_rect.x;
+}
+int Cards::getY()
+{
+	return card_rect.y;
+}
+int Cards::getMebership()
+{
+	return membership;
+}
+int Cards::getType()
+{
+	return type;
 }
