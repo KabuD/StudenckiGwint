@@ -4,8 +4,8 @@ Cards::Cards(int _index, string _path, int _points, int _type, int _membership, 
 {
 	card_rect.x = 0;
 	card_rect.y = 0;
-	card_rect.h = 150;
-	card_rect.w = 150;
+	card_rect.h = 100;
+	card_rect.w = 100;
 	index = _index;
 	path = _path;
 	points = _points;
@@ -13,7 +13,8 @@ Cards::Cards(int _index, string _path, int _points, int _type, int _membership, 
 	ability = _ability;
 	membership = _membership;
 }
-void Cards::Draw(SDL_Renderer *_renderer)
+
+void Cards::loadCardTexture(SDL_Renderer*_renderer)
 {
 	card_image = NULL;
 	card_image = IMG_LoadTexture(_renderer, path.c_str());
@@ -22,11 +23,28 @@ void Cards::Draw(SDL_Renderer *_renderer)
 		cout << "file not found: " << path << endl;
 		system("PAUSE");
 	}
+}
+void Cards::drawCard(SDL_Renderer *_renderer)
+{
 	SDL_RenderCopy(_renderer, card_image, NULL, &card_rect);
 }
-
-void Cards::changePos(double _x, double _y)
+int Cards::getIndex()
+{
+	return index;
+}
+int Cards::getPoint()
+{
+	return points;
+}
+string Cards::getName()
+{
+	return path;
+}
+void Cards::changePosInRow(double _x)
 {
 	card_rect.x = _x;
+}
+void Cards::changeRow(double _y)
+{
 	card_rect.y = _y;
 }

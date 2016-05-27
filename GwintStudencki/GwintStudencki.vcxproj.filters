@@ -24,6 +24,9 @@
     <ClCompile Include="Cards_Func.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Deck_Func.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Gwint_Studencki_Header.h">
@@ -33,9 +36,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Deck_Header.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Logic_Header.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

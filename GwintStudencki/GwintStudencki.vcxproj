@@ -58,7 +58,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -80,6 +80,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Cards_Func.cpp" />
+    <ClCompile Include="Deck_Func.cpp" />
     <ClCompile Include="Gwint_Studencki.cpp" />
     <ClCompile Include="Gwint_Studencki_Func.cpp" />
   </ItemGroup>
@@ -87,7 +88,6 @@
     <ClInclude Include="Cards_Header.h" />
     <ClInclude Include="Deck_Header.h" />
     <ClInclude Include="Gwint_Studencki_Header.h" />
-    <ClInclude Include="Logic_Header.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Karty\cwaniak.png" />
