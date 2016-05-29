@@ -14,7 +14,11 @@ protected:
 	SDL_Window* window;
 	SDL_Texture * background;
 
+	int whosTurn; // operates which team can use the card
 	int visible; // operates which cards are visible on screen. changing on space in 'Logic'
+
+	bool passStudents;
+	bool passTeachers;
 
 	// to make sure that cards arent being moved indefinetly in loadCard func
 	bool doneStudentBase;
@@ -66,20 +70,7 @@ public:
 	void loadAndSetCards();
 	//getting renderer to main
 	SDL_Renderer * getRenderer();
-    // handling mouse
-    void ifclicked(double _x, double _y);
-	// getting clicked cards into respective vectors
-    void setOnTable(Cards * e, int whichOne);
-
-
-
-	~Deck()
-	{
-		Students.clear();
-		Teachers.clear();
-		SDL_DestroyWindow(window);
-		SDL_DestroyRenderer(renderer);
-	}
+	
 };
 
 #endif

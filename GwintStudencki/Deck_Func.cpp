@@ -19,7 +19,11 @@ bool ifDrawed(int iLiczba, int tab[], int ile)
 
 Deck::Deck()
 {
+	passStudents = false;
+	passTeachers = false;
+
 	visible = STUDENT_TEAM;
+	whosTurn = STUDENT_TEAM;
 
 	doneStudentBase = false;
 	doneTeachersBase = false;
@@ -36,6 +40,7 @@ Deck::Deck()
     doneTeachersUsed = false;
 
 	SDL_Init(SDL_INIT_VIDEO);
+	TTF_Init();
     window = NULL;
 	window = SDL_CreateWindow("Gwint Studencki", WINDOW_x, WINDOW_y, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
 	renderer = NULL;
@@ -176,10 +181,12 @@ void Deck::loadDeckTexture()
 	for (int i = 1; i < StudentsBase.size() + 1; i++)
 	{
 		StudentsBase[i - 1]->loadCardTexture(renderer);
+		StudentsBase[i - 1]->loadPoints(renderer);
 	}
 	for (int i = 1; i < TeachersBase.size() + 1; i++)
 	{
 		TeachersBase[i - 1]->loadCardTexture(renderer);
+		TeachersBase[i - 1]->loadPoints(renderer);
 	}
 }
 
@@ -202,7 +209,6 @@ void Deck::loadAndSetCards()
 	{
 		if (!doneTeachersBase)
 		{
-			cout << "i" << endl;
 			TeachersBase[i - 1]->changeRow(756);
 			TeachersBase[i - 1]->changePosInRow(100 + (i*100));
 			if(i==TeachersBase.size())doneTeachersBase = true;
@@ -215,7 +221,7 @@ void Deck::loadAndSetCards()
 	{
 		if (!doneStudentsMelee)
 		{
-			StudentsMelee[i - 1]->changeRow(426);
+			StudentsMelee[i - 1]->changeRow(441);
 			StudentsMelee[i - 1]->changePosInRow(100 + (i * 100));
 			if (i == StudentsMelee.size())doneStudentsMelee = true;
 		}
@@ -226,7 +232,7 @@ void Deck::loadAndSetCards()
 	{
 		if (!doneStudentsRanged)
 		{
-			StudentsRanged[i - 1]->changeRow(536);
+			StudentsRanged[i - 1]->changeRow(546);
 			StudentsRanged[i - 1]->changePosInRow(100 + (i * 100));
 			if (i == StudentsRanged.size())doneStudentsRanged = true;
 		}
@@ -237,7 +243,7 @@ void Deck::loadAndSetCards()
 	{
 		if (!doneStudentsSiege)
 		{
-			StudentsSiege[i - 1]->changeRow(646);
+			StudentsSiege[i - 1]->changeRow(651);
 			StudentsSiege[i - 1]->changePosInRow(100 + (i * 100));
 			if (i == StudentsSiege.size())doneStudentsSiege = true;
 		}
@@ -249,7 +255,7 @@ void Deck::loadAndSetCards()
 		if (!doneTeachersMelee)
 		{
 			cout << "i" << endl;
-			TeachersMelee[i - 1]->changeRow(316);
+			TeachersMelee[i - 1]->changeRow(336);
 			TeachersMelee[i - 1]->changePosInRow(100 + (i * 100));
 			if (i == TeachersMelee.size())doneTeachersMelee = true;
 		}
@@ -261,7 +267,7 @@ void Deck::loadAndSetCards()
 		if (!doneTeachersRanged)
 		{
 			cout << "i" << endl;
-			TeachersRanged[i - 1]->changeRow(206);
+			TeachersRanged[i - 1]->changeRow(231);
 			TeachersRanged[i - 1]->changePosInRow(100 + (i * 100));
 			if (i == TeachersRanged.size())doneTeachersRanged = true;
 		}
@@ -273,7 +279,7 @@ void Deck::loadAndSetCards()
 		if (!doneTeachersSiege)
 		{
 			cout << "i" << endl;
-			TeachersSiege[i - 1]->changeRow(96);
+			TeachersSiege[i - 1]->changeRow(126);
 			TeachersSiege[i - 1]->changePosInRow(100 + (i * 100));
 			if (i == TeachersSiege.size())doneTeachersSiege = true;
 		}
@@ -285,92 +291,4 @@ void Deck::loadAndSetCards()
 SDL_Renderer * Deck::getRenderer()
 {
 	return renderer;
-}
-
-void Deck::ifclicked(double _x, double _y)
-{
-	if (visible == TEACHERS_TEAM)
-	{
-		for (int i = 0; i < TeachersBase.size(); i++)
-		{
-			if (TeachersBase[i]->getX()<_x && TeachersBase[i]->getX() + 100>_x && TeachersBase[i]->getY() < _y && TeachersBase[i]->getY() - 100 < _y)
-
-			{
-				setOnTable(TeachersBase[i], i);
-			}
-		}
-	}
-	if (visible == STUDENT_TEAM)
-	{
-		for (int i = 0; i < StudentsBase.size(); i++)
-		{
-			if (StudentsBase[i]->getX()<_x && StudentsBase[i]->getX() + 100>_x && StudentsBase[i]->getY() < _y && StudentsBase[i]->getY() - 100 < _y)
-
-			{
-				setOnTable(StudentsBase[i], i);
-			}
-		}
-	}
-}
-
-void Deck::setOnTable(Cards * e, int whichOne)
-{
-	cout << TeachersBase.size() << endl;
-	cout << StudentsBase.size() << endl;
-	switch (e->getMebership())
-	{
-
-	case STUDENT_TEAM:
-	{
-						 if (e->getType() == 1)
-						 {
-							 StudentsMelee.push_back(e);
-							 doneStudentsMelee = false;
-							 StudentsBase.erase(StudentsBase.begin() + whichOne);
-							 doneStudentBase = false;
-						 }
-						 if (e->getType() == 2)
-						 {
-							 StudentsRanged.push_back(e);
-							 doneStudentsRanged = false;
-							 StudentsBase.erase(StudentsBase.begin() + whichOne);
-							 doneStudentBase = false;
-						 }
-						 if (e->getType() == 3)
-						 {
-							 StudentsSiege.push_back(e);
-							 doneStudentsSiege = false;
-							 StudentsBase.erase(StudentsBase.begin() + whichOne);
-							 doneStudentBase = false;
-						 }
-						 break;
-	}
-
-
-	case TEACHERS_TEAM:
-	{
-						  if (e->getType() == 1)
-						  {
-							  TeachersMelee.push_back(e);
-							  doneTeachersMelee = false;
-							  TeachersBase.erase(TeachersBase.begin() + whichOne);
-							  doneTeachersBase = false;
-						  }
-						  if (e->getType() == 2)
-						  {
-							  TeachersRanged.push_back(e);
-							  doneTeachersRanged = false;
-							  TeachersBase.erase(TeachersBase.begin() + whichOne);
-							  doneTeachersBase = false;
-						  }
-						  if (e->getType() == 3)
-						  {
-							  TeachersSiege.push_back(e);
-							  doneTeachersSiege = false;
-							  TeachersBase.erase(TeachersBase.begin() + whichOne);
-							  doneTeachersBase = false;
-						  }
-						  break;
-	}
-	}
 }

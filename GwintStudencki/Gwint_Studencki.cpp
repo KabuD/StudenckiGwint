@@ -4,12 +4,8 @@
 
 int main(int argc, char* args[])
 {
+
 	srand(time(NULL));
-	bool quit = false;
-	for (int i = 0; i < 10; i++)
-	{
-		cout << pow(-1, i) << endl;
-	}
 	Logic entirelogic;
 
 	entirelogic.drawingStudentsCards(); // drawing 10 cards from student's deck
@@ -27,14 +23,15 @@ int main(int argc, char* args[])
 	background_rect.w = 1400;
 
 	SDL_Event * mainEvent = new SDL_Event();
-	while (entirelogic.getEvent(mainEvent))
+	while (entirelogic.getEvent(mainEvent)) // function doing all the mouse and keyboard checking as well as logic
 	{
 		SDL_RenderClear(entirelogic.getRenderer());
 		SDL_RenderCopy(entirelogic.getRenderer(), background, NULL, &background_rect);
 		entirelogic.loadAndSetCards();
 		SDL_RenderPresent(entirelogic.getRenderer());
 	}
-	
 	delete mainEvent;
+	SDL_DestroyTexture(background);
+	entirelogic.~Logic();
 	return 0;
 }
