@@ -3,10 +3,44 @@
 Logic::Logic()
 {
 	endOfRound = false;
-	accepted = false;
+	ifcurtain = true;
 	mPosition.x = 0;
 	mPosition.y = 0;
 	whosTurn = STUDENT_TEAM;
+
+	passStudents = false;
+	passTeachers = false;
+
+
+	StudentsMeleePoints = 0;
+	StudentsRangedPoints = 0;
+	StudentsSiegePoints = 0;
+	TeachersMeleePoints = 0;
+	TeachersRangedPoints = 0;
+	TeachersSiegePoints = 0;
+
+}
+void Logic::playerPass()
+{
+	switch (visible)
+	{
+	case TEACHERS_TEAM:
+	{
+						  stopper = NULL;
+						  stopper = IMG_LoadTexture(renderer, "student.png");
+						  visible = STUDENT_TEAM;
+						  passTeachers = true;
+						  break;
+	}
+	case STUDENT_TEAM:
+	{
+						 stopper = NULL;
+						 stopper = IMG_LoadTexture(renderer, "prowadzacy.png");
+						 visible = TEACHERS_TEAM;
+						 passStudents = true;
+						 break;
+	}
+	}
 }
 int Logic::getEvent(SDL_Event * e)
 {
@@ -23,26 +57,21 @@ int Logic::getEvent(SDL_Event * e)
 				  case ' ': //spacja
 				  {
 
-							if (passStudents && passTeachers) endOfRound = true;
-
-							if (!endOfRound)
-							{
-								if (visible == TEACHERS_TEAM)
+								playerPass();
+								if (passStudents && passTeachers)
 								{
-									visible = STUDENT_TEAM;
-									passTeachers = true;
+									endOfRound = true;
 								}
-								else
+								if (endOfRound)
 								{
-									visible = TEACHERS_TEAM;
-									passStudents = true;
+									pointScore();
 								}
 								return 1;
-							}
+
 				  }
 				  case 'y':
 				  {
-							  accepted = true;
+							  ifcurtain = false;
 							  break;
 				  }
 			}
@@ -51,10 +80,10 @@ int Logic::getEvent(SDL_Event * e)
 		{
 			int x, y;
 			SDL_GetMouseState(&x, &y);
-			if (!endOfRound && accepted)
+			if (!endOfRound)
 			{
 				ifclicked(x, y);
-				accepted = false;
+				ifcurtain = true;
 			}
 			return 1;
 		}
@@ -93,64 +122,129 @@ void Logic::ifclicked(double _x, double _y)
 }
 void Logic::setOnTable(Cards * e, int whichOne)
 {
+	checkAbility(e); 
+
 	switch (e->getMebership())
 	{
-
 	case STUDENT_TEAM:
 	{
-		{
-			if (e->getType() == 1)
-			{
-				StudentsMelee.push_back(e);
-				doneStudentsMelee = false;
-				StudentsBase.erase(StudentsBase.begin() + whichOne);
-				doneStudentBase = false;
-			}
-			if (e->getType() == 2)
-			{
-				StudentsRanged.push_back(e);
-				doneStudentsRanged = false;
-				StudentsBase.erase(StudentsBase.begin() + whichOne);
-				doneStudentBase = false;
-			}
-			if (e->getType() == 3)
-			{
-				StudentsSiege.push_back(e);
-				doneStudentsSiege = false;
-				StudentsBase.erase(StudentsBase.begin() + whichOne);
-				doneStudentBase = false;
-			}
-			if (!passTeachers)
-			{
+						 if (e->getType() == TYPE_MELEE)
+						 {
+							 if (e->getAbility() != ABILITY_SPY)
+							 {
+								 StudentsMelee.push_back(e);
+								 doneStudentsMelee = false;
+								 addPointsAfterSettingOnTable(e);
+							 }
+							 else
+							 {
+								 e->changeMembership();
+								 TeachersMelee.push_back(e);
+								 doneTeachersMelee = false;
+								 addPointsAfterSettingOnTable(e);
+							 }
+							 StudentsBase.erase(StudentsBase.begin() + whichOne);
+							 doneStudentBase = false;
+						 }
+						 if (e->getType() == TYPE_RANGED)
+						 {
+							 if (e->getAbility() != ABILITY_SPY)
+							 {
+								 StudentsRanged.push_back(e);
+								 doneStudentsRanged = false;
+								 addPointsAfterSettingOnTable(e);
+							 }
+							 else
+							 {
+								 e->changeMembership();
+								 TeachersRanged.push_back(e);
+								 doneTeachersRanged = false;
+								 addPointsAfterSettingOnTable(e);
+							 }
+							 StudentsBase.erase(StudentsBase.begin() + whichOne);
+							 doneStudentBase = false;
+						 }
+						 if (e->getType() == TYPE_SIEGE)
+						 {
+							 if (e->getAbility() != ABILITY_SPY)
+							 {
+								 StudentsSiege.push_back(e);
+								 doneStudentsSiege = false;
+								 addPointsAfterSettingOnTable(e);
+							 }
+							 else
+							 {
+								 e->changeMembership();
+								 TeachersSiege.push_back(e);
+								 doneTeachersSiege = false;
+								 addPointsAfterSettingOnTable(e);
+							 }
+							 StudentsBase.erase(StudentsBase.begin() + whichOne);
+							 doneStudentBase = false;
+						 }
+						 if (!passTeachers)
+						 {
 
-				whosTurn = TEACHERS_TEAM;
-				visible = TEACHERS_TEAM;
-			}
-			break;
-		}
+							 whosTurn = TEACHERS_TEAM;
+							 visible = TEACHERS_TEAM;
+						 }
+						 break;
 
 	}
 	case TEACHERS_TEAM:
 	{
 
-						  if (e->getType() == 1)
+						  if (e->getType() == TYPE_MELEE)
 						  {
-							  TeachersMelee.push_back(e);
-							  doneTeachersMelee = false;
+							  if (e->getAbility() != ABILITY_SPY)
+							  {
+								  TeachersMelee.push_back(e);
+								  doneTeachersMelee = false;
+								  addPointsAfterSettingOnTable(e);
+							  }
+							  else
+							  {
+								  e->changeMembership();
+								  StudentsMelee.push_back(e);
+								  doneTeachersMelee = false;
+								  addPointsAfterSettingOnTable(e);
+							  }
 							  TeachersBase.erase(TeachersBase.begin() + whichOne);
 							  doneTeachersBase = false;
 						  }
-						  if (e->getType() == 2)
+						  if (e->getType() == TYPE_RANGED)
 						  {
-							  TeachersRanged.push_back(e);
-							  doneTeachersRanged = false;
+							  if (e->getAbility() != ABILITY_SPY)
+							  {
+								  TeachersRanged.push_back(e);
+								  doneTeachersRanged = false;
+								  addPointsAfterSettingOnTable(e);
+							  }
+							  else
+							  {
+								  e->changeMembership();
+								  StudentsRanged.push_back(e);
+								  doneStudentsRanged = false;
+								  addPointsAfterSettingOnTable(e);
+							  }
 							  TeachersBase.erase(TeachersBase.begin() + whichOne);
 							  doneTeachersBase = false;
 						  }
-						  if (e->getType() == 3)
+						  if (e->getType() == TYPE_SIEGE)
 						  {
-							  TeachersSiege.push_back(e);
-							  doneTeachersSiege = false;
+							  if (e->getAbility() != ABILITY_SPY)
+							  {
+								  TeachersSiege.push_back(e);
+								  doneTeachersSiege = false;
+								  addPointsAfterSettingOnTable(e);
+							  }
+							  else
+							  {
+								  e->changeMembership();
+								  StudentsSiege.push_back(e);
+								  doneStudentsSiege = false;
+								  addPointsAfterSettingOnTable(e);
+							  }
 							  TeachersBase.erase(TeachersBase.begin() + whichOne);
 							  doneTeachersBase = false;
 						  }
@@ -158,13 +252,93 @@ void Logic::setOnTable(Cards * e, int whichOne)
 						  {
 							  whosTurn = STUDENT_TEAM;
 							  visible = STUDENT_TEAM;
-							  break;
 						  }
-
+						  break;
 	}
 	}
 }
+void Logic::addPointsAfterSettingOnTable(Cards * e)
+{
+	switch (e->getMebership())
+	{
+	case STUDENT_TEAM:
+	{
 
+						 if (e->getType() == 1)
+						 {
+							 StudentsMeleePoints += e->getPoints();
+						 }
+						 if (e->getType() == 2)
+						 {
+							 StudentsRangedPoints += e->getPoints();
+						 }
+						 if (e->getType() == 3)
+						 {
+							 StudentsSiegePoints += e->getPoints();
+						 }
+						 break;
+	}
+	case TEACHERS_TEAM:
+	{
+
+						  if (e->getType() == 1)
+						  {
+							  TeachersMeleePoints += e->getPoints();
+						  }
+						  if (e->getType() == 2)
+						  {
+							  TeachersRangedPoints += e->getPoints();
+						  }
+						  if (e->getType() == 3)
+						  {
+							  TeachersSiegePoints += e->getPoints();
+						  }
+						  break;
+	}
+	}
+}
+void Logic::checkAbility(Cards * e)
+{
+	switch (e->getAbility())
+	{
+	case ABILITY_NONE:
+	{
+						 break;
+	}
+	case ABILITY_SPY: // already done in setOnTable func by few ifs. dunno how to make it here
+	{
+						break;
+	}
+	case ABILITY_ALL4ONE:
+	{
+							//TODO
+						  break;
+	}
+	case ABILITY_MEDIC:
+	{
+						  //TODO
+						  break;
+	}
+	}
+}
+void Logic::pointScore()
+{
+	cout << "Teachers Melee: " << TeachersMeleePoints << endl;
+	cout << "Teachers Ranged: " << TeachersRangedPoints << endl;
+	cout << "Teachers Siege: " << TeachersSiegePoints << endl;
+	cout << "Students Melee: " << StudentsMeleePoints << endl;
+	cout << "Students Ranged: " << StudentsRangedPoints << endl;
+	cout << "Students Siege: " << StudentsSiegePoints << endl;
+
+
+
+
+
+}
+bool Logic::getIfCurtain()
+{
+	return ifcurtain;
+}
 Logic::~Logic()
 {
 		Students.clear();
@@ -219,6 +393,12 @@ Logic::~Logic()
 			TeachersUsed[i]->~Cards();
 		}
 		TeachersUsed.clear();
+		SDL_DestroyTexture(image_score);
+		SDL_DestroyTexture(image_studentsPass);
+		SDL_DestroyTexture(image_studentsTurn);
+		SDL_DestroyTexture(image_teachersTurn);
+		SDL_DestroyTexture(image_teachersPass);
 		SDL_DestroyWindow(window);
 		SDL_DestroyRenderer(renderer);
 }
+

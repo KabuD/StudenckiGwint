@@ -21,10 +21,10 @@
     <ClCompile Include="Cards_Func.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Deck_Func.cpp">
+    <ClCompile Include="Logic_Func.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Logic_Func.cpp">
+    <ClCompile Include="Table_Func.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -35,10 +35,10 @@
     <ClInclude Include="Cards_Header.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Deck_Header.h">
+    <ClInclude Include="Logic_Header.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Logic_Header.h">
+    <ClInclude Include="Table_Header.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,24 +1,32 @@
-#ifndef DECK_HEADER_H
-#define DECK_HEADER_H
+#ifndef TABLE_HEADER_H
+#define TABLE_HEADER_H
 
 #include "Cards_Header.h"
 
 bool ifDrawed(int iLiczba, int tab[], int ile);
 
-class Deck
+class Table
 {
 protected:
 	SDL_Point mPosition;
 	// handlers
 	SDL_Renderer *renderer;
 	SDL_Window* window;
-	SDL_Texture * background;
+
+	SDL_Texture * image_score;
+
+	SDL_Texture * image_teachersTurn;
+	SDL_Texture * image_teachersPass;
+
+	SDL_Texture * image_studentsTurn;
+	SDL_Texture * image_studentsPass;
+
+	SDL_Texture * back;
+
+	SDL_Rect screen_rect;
 
 	int whosTurn; // operates which team can use the card
 	int visible; // operates which cards are visible on screen. changing on space in 'Logic'
-
-	bool passStudents;
-	bool passTeachers;
 
 	// to make sure that cards arent being moved indefinetly in loadCard func
 	bool doneStudentBase;
@@ -58,18 +66,25 @@ protected:
 	vector<Cards*>TeachersUsed;
 
 public:
-	Deck();
+	Table();
 	
 	//chooses cards for students deck
 	void drawingStudentsCards();
 	// chooses cards for teachers deck
 	void drawingTeachersCards();
 	//loads texture for each card
-	void loadDeckTexture();
+	void loadTableTexture();
+	//for loop
+	void showBackground();
 	//function in loop to show and set cards on screen
-	void loadAndSetCards();
+	void showAndSetCards();
 	//getting renderer to main
 	SDL_Renderer * getRenderer();
+	//gets curtain on screen after certain actions
+	void showCurtain(int whichOne);
+	void loadBackgroundAndCurtains();
+
+
 	
 };
 

@@ -80,13 +80,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Cards_Func.cpp" />
-    <ClCompile Include="Deck_Func.cpp" />
+    <ClCompile Include="Table_Func.cpp" />
     <ClCompile Include="Gwint_Studencki.cpp" />
     <ClCompile Include="Logic_Func.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cards_Header.h" />
-    <ClInclude Include="Deck_Header.h" />
+    <ClInclude Include="Table_Header.h" />
     <ClInclude Include="Gwint_Studencki_Header.h" />
     <ClInclude Include="Logic_Header.h" />
   </ItemGroup>

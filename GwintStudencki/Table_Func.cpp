@@ -1,4 +1,4 @@
-#include "Deck_Header.h"
+#include "Table_Header.h"
 
 bool ifDrawed(int iLiczba, int tab[], int ile)
 {
@@ -17,10 +17,8 @@ bool ifDrawed(int iLiczba, int tab[], int ile)
 	return false;
 }
 
-Deck::Deck()
+Table::Table()
 {
-	passStudents = false;
-	passTeachers = false;
 
 	visible = STUDENT_TEAM;
 	whosTurn = STUDENT_TEAM;
@@ -107,7 +105,7 @@ Deck::Deck()
 	Teachers.push_back(new Cards(76, "karty/egzaminustny.png", 6, TYPE_RANGED, TEACHERS_TEAM, ABILITY_NONE));
 }
 
-void Deck::drawingStudentsCards()
+void Table::drawingStudentsCards()
 {
 	int cards[10];
 	int drawed = 0;
@@ -142,7 +140,7 @@ void Deck::drawingStudentsCards()
 
 }
 
-void Deck::drawingTeachersCards()
+void Table::drawingTeachersCards()
 {
 	int cards[10];
 	int drawed = 0;
@@ -176,8 +174,10 @@ void Deck::drawingTeachersCards()
 	}
 }
 
-void Deck::loadDeckTexture()
+void Table::loadTableTexture()
 {
+	loadBackgroundAndCurtains();
+
 	for (int i = 1; i < StudentsBase.size() + 1; i++)
 	{
 		StudentsBase[i - 1]->loadCardTexture(renderer);
@@ -190,14 +190,19 @@ void Deck::loadDeckTexture()
 	}
 }
 
-void Deck::loadAndSetCards()
+void Table::showBackground()
+{
+	SDL_RenderCopy(renderer, back, NULL, &screen_rect);
+}
+
+void Table::showAndSetCards()
 {
 	////////////////////////////////////////////////////////////STUDENT S BASE
 	for (int i = 1; i < StudentsBase.size()+1; i++)
 	{
 		if (!doneStudentBase)
 		{
-			StudentsBase[i - 1]->changeRow(756);
+			StudentsBase[i - 1]->changeRow(ROW_BASE);
 			StudentsBase[i - 1]->changePosInRow(100 + (i * 100));
 			if(i==StudentsBase.size())doneStudentBase = true;
 		}
@@ -209,7 +214,7 @@ void Deck::loadAndSetCards()
 	{
 		if (!doneTeachersBase)
 		{
-			TeachersBase[i - 1]->changeRow(756);
+			TeachersBase[i - 1]->changeRow(ROW_BASE);
 			TeachersBase[i - 1]->changePosInRow(100 + (i*100));
 			if(i==TeachersBase.size())doneTeachersBase = true;
 		}
@@ -221,7 +226,7 @@ void Deck::loadAndSetCards()
 	{
 		if (!doneStudentsMelee)
 		{
-			StudentsMelee[i - 1]->changeRow(441);
+			StudentsMelee[i - 1]->changeRow(ROW_STUDENTS_MELEE);
 			StudentsMelee[i - 1]->changePosInRow(100 + (i * 100));
 			if (i == StudentsMelee.size())doneStudentsMelee = true;
 		}
@@ -232,7 +237,7 @@ void Deck::loadAndSetCards()
 	{
 		if (!doneStudentsRanged)
 		{
-			StudentsRanged[i - 1]->changeRow(546);
+			StudentsRanged[i - 1]->changeRow(ROW_STUDENTS_RANGED);
 			StudentsRanged[i - 1]->changePosInRow(100 + (i * 100));
 			if (i == StudentsRanged.size())doneStudentsRanged = true;
 		}
@@ -243,7 +248,7 @@ void Deck::loadAndSetCards()
 	{
 		if (!doneStudentsSiege)
 		{
-			StudentsSiege[i - 1]->changeRow(651);
+			StudentsSiege[i - 1]->changeRow(ROW_STUDENTS_SIEGE);
 			StudentsSiege[i - 1]->changePosInRow(100 + (i * 100));
 			if (i == StudentsSiege.size())doneStudentsSiege = true;
 		}
@@ -254,8 +259,7 @@ void Deck::loadAndSetCards()
 	{
 		if (!doneTeachersMelee)
 		{
-			cout << "i" << endl;
-			TeachersMelee[i - 1]->changeRow(336);
+			TeachersMelee[i - 1]->changeRow(ROW_TEACHERS_MELEE);
 			TeachersMelee[i - 1]->changePosInRow(100 + (i * 100));
 			if (i == TeachersMelee.size())doneTeachersMelee = true;
 		}
@@ -267,7 +271,7 @@ void Deck::loadAndSetCards()
 		if (!doneTeachersRanged)
 		{
 			cout << "i" << endl;
-			TeachersRanged[i - 1]->changeRow(231);
+			TeachersRanged[i - 1]->changeRow(ROW_TEACHERS_RANGED);
 			TeachersRanged[i - 1]->changePosInRow(100 + (i * 100));
 			if (i == TeachersRanged.size())doneTeachersRanged = true;
 		}
@@ -279,7 +283,7 @@ void Deck::loadAndSetCards()
 		if (!doneTeachersSiege)
 		{
 			cout << "i" << endl;
-			TeachersSiege[i - 1]->changeRow(126);
+			TeachersSiege[i - 1]->changeRow(ROW_TEACHERS_SIEGE);
 			TeachersSiege[i - 1]->changePosInRow(100 + (i * 100));
 			if (i == TeachersSiege.size())doneTeachersSiege = true;
 		}
@@ -288,7 +292,31 @@ void Deck::loadAndSetCards()
 
 }
 
-SDL_Renderer * Deck::getRenderer()
+SDL_Renderer * Table::getRenderer()
 {
 	return renderer;
+}
+
+void Table::showCurtain(int whichOne)
+{
+	if (whichOne == 1){}
+	if (whichOne == 2){}
+	if (whichOne == 3){}
+	if (whichOne == 4){}
+	if (whichOne == 5){}
+}
+
+
+//TODO
+void Table::loadBackgroundAndCurtains()
+{
+	image_score=NULL;
+
+	image_teachersTurn=NULL;
+	image_teachersPass=NULL;
+
+	image_studentsTurn=NULL;
+	image_studentsPass=NULL;
+
+	back=NULL;
 }

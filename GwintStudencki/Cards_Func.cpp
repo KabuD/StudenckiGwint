@@ -65,6 +65,11 @@ int Cards::getMebership()
 {
 	return membership;
 }
+void Cards::changeMembership()
+{
+	if (membership == STUDENT_TEAM)membership = TEACHERS_TEAM;
+	else membership = STUDENT_TEAM;
+}
 int Cards::getType()
 {
 	return type;
@@ -72,4 +77,8 @@ int Cards::getType()
 int Cards::getPoints()
 {
 	return points;
+}
+int Cards::getAbility()
+{
+	return ability;
 }

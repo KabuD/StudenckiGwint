@@ -13,8 +13,8 @@
 
 using namespace std;
 
-const int WINDOW_WIDTH=1400;
-const int WINDOW_HEIGHT=866;
+const int WINDOW_WIDTH=1366;
+const int WINDOW_HEIGHT=768;
 const int WINDOW_x=200;
 const int WINDOW_y=-900;
 
@@ -30,4 +30,12 @@ const int TYPE_MELEE = 1;
 const int TYPE_RANGED = 2;
 const int TYPE_SIEGE = 3;
 
+
+const int ROW_TEACHERS_SIEGE = 14;
+const int ROW_TEACHERS_RANGED = 120;
+const int ROW_TEACHERS_MELEE = 226;
+const int ROW_STUDENTS_MELEE = 332;
+const int ROW_STUDENTS_RANGED = 438;
+const int ROW_STUDENTS_SIEGE = 544;
+const int ROW_BASE = 650;
 #endif
