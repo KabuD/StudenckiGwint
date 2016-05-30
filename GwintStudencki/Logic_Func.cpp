@@ -26,16 +26,12 @@ void Logic::playerPass()
 	{
 	case TEACHERS_TEAM:
 	{
-						  stopper = NULL;
-						  stopper = IMG_LoadTexture(renderer, "student.png");
 						  visible = STUDENT_TEAM;
 						  passTeachers = true;
 						  break;
 	}
 	case STUDENT_TEAM:
 	{
-						 stopper = NULL;
-						 stopper = IMG_LoadTexture(renderer, "prowadzacy.png");
 						 visible = TEACHERS_TEAM;
 						 passStudents = true;
 						 break;
@@ -64,7 +60,7 @@ int Logic::getEvent(SDL_Event * e)
 								}
 								if (endOfRound)
 								{
-									pointScore();
+									viewPointScore();
 								}
 								return 1;
 
@@ -124,7 +120,7 @@ void Logic::setOnTable(Cards * e, int whichOne)
 {
 	checkAbility(e); 
 
-	switch (e->getMebership())
+	switch (e->getMembership())
 	{
 	case STUDENT_TEAM:
 	{
@@ -256,42 +252,73 @@ void Logic::setOnTable(Cards * e, int whichOne)
 						  break;
 	}
 	}
+	reloadPoints(); // updates points if ability is used 
 }
 void Logic::addPointsAfterSettingOnTable(Cards * e)
 {
-	switch (e->getMebership())
+	switch (e->getMembership())
 	{
 	case STUDENT_TEAM:
 	{
-
-						 if (e->getType() == 1)
+						 if (e->getType() == TYPE_MELEE)
 						 {
-							 StudentsMeleePoints += e->getPoints();
+							 int allPoints = 0;
+							 for (int i = 0; i < StudentsMelee.size(); i++)
+							 {
+								 allPoints += StudentsMelee[i]->getPoints();
+							 }
+							 StudentsMeleePoints = allPoints;
 						 }
-						 if (e->getType() == 2)
+							
+						 if (e->getType() == TYPE_RANGED)
 						 {
-							 StudentsRangedPoints += e->getPoints();
+							 int allPoints = 0;
+							 for (int i = 0; i < StudentsRanged.size(); i++)
+							 {
+								 allPoints += StudentsRanged[i]->getPoints();
+							 }
+							 StudentsRangedPoints = allPoints;
 						 }
-						 if (e->getType() == 3)
+						 if (e->getType() == TYPE_SIEGE)
 						 {
-							 StudentsSiegePoints += e->getPoints();
+							 int allPoints = 0;
+							 for (int i = 0; i < StudentsSiege.size(); i++)
+							 {
+								 allPoints += StudentsRanged[i]->getPoints();
+							 }
+							 StudentsSiegePoints = allPoints;
 						 }
 						 break;
+
 	}
 	case TEACHERS_TEAM:
 	{
-
-						  if (e->getType() == 1)
+						  if (e->getType() == TYPE_MELEE)
 						  {
-							  TeachersMeleePoints += e->getPoints();
+							  int allPoints = 0;
+							  for (int i = 0; i < TeachersMelee.size(); i++)
+							  {
+								  allPoints += TeachersMelee[i]->getPoints();
+							  }
+							  TeachersMeleePoints = allPoints;
 						  }
-						  if (e->getType() == 2)
+						  if (e->getType() == TYPE_RANGED)
 						  {
-							  TeachersRangedPoints += e->getPoints();
+							  int allPoints = 0;
+							  for (int i = 0; i < TeachersRanged.size(); i++)
+							  {
+								  allPoints += TeachersRanged[i]->getPoints();
+							  }
+							  TeachersRangedPoints = allPoints;
 						  }
-						  if (e->getType() == 3)
+						  if (e->getType() == TYPE_SIEGE)
 						  {
-							  TeachersSiegePoints += e->getPoints();
+							  int allPoints = 0;
+							  for (int i = 0; i < TeachersSiege.size(); i++)
+							  {
+								  allPoints += TeachersSiege[i]->getPoints();
+							  }
+							  TeachersSiegePoints = allPoints;
 						  }
 						  break;
 	}
@@ -305,14 +332,15 @@ void Logic::checkAbility(Cards * e)
 	{
 						 break;
 	}
-	case ABILITY_SPY: // already done in setOnTable func by few ifs. dunno how to make it here
+	case ABILITY_SPY: // setting done in setOnTable func by few ifs. dunno how to make it here
 	{
-						break;
+						  CardWithSpyAbility(e);
+						  break;
 	}
 	case ABILITY_ALL4ONE:
 	{
-							//TODO
-						  break;
+							CardWithAllForOneAbility(e);
+							break;
 	}
 	case ABILITY_MEDIC:
 	{
@@ -321,7 +349,167 @@ void Logic::checkAbility(Cards * e)
 	}
 	}
 }
-void Logic::pointScore()
+void Logic::CardWithSpyAbility(Cards * e)
+{
+	if (e->getMembership() == STUDENT_TEAM)
+	{
+		drawOneCard(STUDENT_TEAM);
+		drawOneCard(STUDENT_TEAM);
+	}
+	if (e->getMembership() == TEACHERS_TEAM)
+	{
+		drawOneCard(TEACHERS_TEAM);
+		drawOneCard(TEACHERS_TEAM);
+	}
+}
+void Logic::CardWithAllForOneAbility(Cards *e)
+{
+	switch (e->getMembership())
+	{
+	case STUDENT_TEAM:
+	{
+
+						 if (e->getType() == 1)
+						 {
+							 int howManyOfAKind = 0; //checking how many of same card are there 
+							 for (int i = 0; i < StudentsMelee.size(); i++)
+							 {
+								 if (StudentsMelee[i]->getName() == e->getName())
+								 {
+									 howManyOfAKind += 1;
+								 }
+							 }
+
+							 e->multiplyPoints(howManyOfAKind);
+
+							 for (int i = 0; i < StudentsMelee.size(); i++)
+							 {
+								 if (StudentsMelee[i]->getName() == e->getName())
+								 {
+									 StudentsMelee[i]->multiplyPoints(howManyOfAKind);
+								 }
+							 }
+						 }
+						 if (e->getType() == 2)
+						 {
+							 int howManyOfAKind = 0; //checking how many of same card are there 
+							 for (int i = 0; i < StudentsRanged.size(); i++)
+							 {
+								 if (StudentsRanged[i]->getName() == e->getName())
+								 {
+									 howManyOfAKind += 1;
+									 StudentsRanged[i]->multiplyPoints(1);
+								 }
+							 }
+
+							 e->multiplyPoints(howManyOfAKind);
+
+							 for (int i = 0; i < StudentsRanged.size(); i++)
+							 {
+								 if (StudentsRanged[i]->getName() == e->getName())
+								 {
+									 StudentsRanged[i]->multiplyPoints(howManyOfAKind);
+								 }
+							 }
+						 }
+						 if (e->getType() == 3)
+						 {
+							 int howManyOfAKind = 0; //checking how many of same card are there 
+							 for (int i = 0; i < StudentsSiege.size(); i++)
+							 {
+								 if (StudentsSiege[i]->getName() == e->getName())
+								 {
+									 howManyOfAKind += 1;
+									 StudentsSiege[i]->multiplyPoints(1);
+								 }
+							 }
+
+							 e->multiplyPoints(howManyOfAKind);
+
+							 for (int i = 0; i < StudentsSiege.size(); i++)
+							 {
+								 if (StudentsSiege[i]->getName() == e->getName())
+								 {
+									 StudentsSiege[i]->multiplyPoints(howManyOfAKind);
+								 }
+							 }
+						 }
+						 break;
+	}
+	case TEACHERS_TEAM:
+	{
+
+						  if (e->getType() == 1)
+						  {
+							  int howManyOfAKind = 0; //checking how many of same card are there 
+							  for (int i = 0; i < TeachersMelee.size(); i++)
+							  {
+								  if (TeachersMelee[i]->getName() == e->getName())
+								  {
+									  howManyOfAKind += 1;
+									  TeachersMelee[i]->multiplyPoints(1);
+								  }
+							  }
+
+							  e->multiplyPoints(howManyOfAKind);
+
+							  for (int i = 0; i < TeachersMelee.size(); i++)
+							  {
+								  if (TeachersMelee[i]->getName() == e->getName())
+								  {
+									  TeachersMelee[i]->multiplyPoints(howManyOfAKind);
+								  }
+							  }
+						  }
+						  if (e->getType() == 2)
+						  {
+							  int howManyOfAKind = 0; //checking how many of same card are there 
+							  for (int i = 0; i < TeachersRanged.size(); i++)
+							  {
+								  if (TeachersRanged[i]->getName() == e->getName())
+								  {
+									  howManyOfAKind += 1;
+									  TeachersRanged[i]->multiplyPoints(1);
+								  }
+							  }
+
+							  e->multiplyPoints(howManyOfAKind);
+
+							  for (int i = 0; i < TeachersRanged.size(); i++)
+							  {
+								  if (TeachersRanged[i]->getName() == e->getName())
+								  {
+									  TeachersRanged[i]->multiplyPoints(howManyOfAKind);
+								  }
+							  }
+						  }
+						  if (e->getType() == 3)
+						  {
+							  int howManyOfAKind = 0; //checking how many of same card are there 
+							  for (int i = 0; i < TeachersSiege.size(); i++)
+							  {
+								  if (TeachersSiege[i]->getName() == e->getName())
+								  {
+									  howManyOfAKind += 1;
+									  TeachersSiege[i]->multiplyPoints(1);
+								  }
+							  }
+
+							  e->multiplyPoints(howManyOfAKind);
+
+							  for (int i = 0; i < TeachersSiege.size(); i++)
+							  {
+								  if (TeachersSiege[i]->getName() == e->getName())
+								  {
+									  TeachersSiege[i]->multiplyPoints(howManyOfAKind);
+								  }
+							  }
+						  }
+						  break;
+	}
+	}
+}
+void Logic::viewPointScore()
 {
 	cout << "Teachers Melee: " << TeachersMeleePoints << endl;
 	cout << "Teachers Ranged: " << TeachersRangedPoints << endl;

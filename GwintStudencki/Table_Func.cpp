@@ -174,6 +174,31 @@ void Table::drawingTeachersCards()
 	}
 }
 
+void Table::drawOneCard(int whichTeam)
+{
+	switch (whichTeam)
+	{
+	case STUDENT_TEAM:
+	{
+						 int number = rand() % (Students.size()-1) + 0;
+						 StudentsBase.push_back(Students[number]);
+						 doneStudentBase = false;
+						 Students.erase(Students.begin() + number);
+						 loadTableTexture();
+						 break;
+	}
+	case TEACHERS_TEAM:
+	{
+						  int number = rand() % (Teachers.size() - 1) + 0;
+						  TeachersBase.push_back(Teachers[number]);
+						  doneTeachersBase = false;
+						  Teachers.erase(Teachers.begin() + number);
+						  loadTableTexture();
+						  break;
+	}
+	}
+}
+
 void Table::loadTableTexture()
 {
 	loadBackgroundAndCurtains();
@@ -187,6 +212,34 @@ void Table::loadTableTexture()
 	{
 		TeachersBase[i - 1]->loadCardTexture(renderer);
 		TeachersBase[i - 1]->loadPoints(renderer);
+	}
+}
+
+void Table::reloadPoints()
+{
+	for (int i = 0; i < StudentsMelee.size(); i++)
+	{
+		StudentsMelee[i]->loadPoints(renderer);
+	}
+	for (int i = 0; i < StudentsRanged.size(); i++)
+	{
+		StudentsRanged[i]->loadPoints(renderer);
+	}
+	for (int i = 0; i < StudentsSiege.size(); i++)
+	{
+		StudentsSiege[i]->loadPoints(renderer);
+	}
+	for (int i = 0; i < TeachersMelee.size(); i++)
+	{
+		TeachersMelee[i]->loadPoints(renderer);
+	}
+	for (int i = 0; i < TeachersRanged.size(); i++)
+	{
+		TeachersRanged[i]->loadPoints(renderer);
+	}
+	for (int i = 0; i < TeachersSiege.size(); i++)
+	{
+		TeachersSiege[i]->loadPoints(renderer);
 	}
 }
 
@@ -306,10 +359,14 @@ void Table::showCurtain(int whichOne)
 	if (whichOne == 5){}
 }
 
-
 //TODO
 void Table::loadBackgroundAndCurtains()
 {
+	screen_rect.x = 0;
+	screen_rect.y = 0;
+	screen_rect.w = 1366;
+	screen_rect.h = 768;
+
 	image_score=NULL;
 
 	image_teachersTurn=NULL;
@@ -318,5 +375,6 @@ void Table::loadBackgroundAndCurtains()
 	image_studentsTurn=NULL;
 	image_studentsPass=NULL;
 
-	back=NULL;
+	back = NULL;
+	back = IMG_LoadTexture(renderer, "tekstura.png");
 }

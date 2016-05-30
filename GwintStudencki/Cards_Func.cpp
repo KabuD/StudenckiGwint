@@ -61,7 +61,7 @@ int Cards::getY()
 {
 	return card_rect.y;
 }
-int Cards::getMebership()
+int Cards::getMembership()
 {
 	return membership;
 }
@@ -70,9 +70,17 @@ void Cards::changeMembership()
 	if (membership == STUDENT_TEAM)membership = TEACHERS_TEAM;
 	else membership = STUDENT_TEAM;
 }
+void Cards::multiplyPoints(int howMany)
+{
+	points = original_points * pow(2,howMany);
+}
 int Cards::getType()
 {
 	return type;
+}
+string Cards::getName()
+{
+	return path;
 }
 int Cards::getPoints()
 {

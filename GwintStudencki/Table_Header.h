@@ -72,8 +72,12 @@ public:
 	void drawingStudentsCards();
 	// chooses cards for teachers deck
 	void drawingTeachersCards();
+	//func used after using spy
+	void drawOneCard(int whichTeam);
 	//loads texture for each card
 	void loadTableTexture();
+	// used in all4one ability and in setting next round
+	void reloadPoints();
 	//for loop
 	void showBackground();
 	//function in loop to show and set cards on screen

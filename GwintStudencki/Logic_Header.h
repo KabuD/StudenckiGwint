@@ -14,16 +14,10 @@ private:
 	int TeachersRangedPoints;
 	int TeachersSiegePoints;
 
-	SDL_Texture * stopper;
-
 	bool passStudents;
 	bool passTeachers;
 public:
 	Logic();
-	SDL_Texture * getTexture()
-	{
-		return stopper;
-	}
 	//checks if theres "curtain" on screen. used in main 
 	bool getIfCurtain();
 	//when someone pushes space
@@ -36,10 +30,14 @@ public:
 	void setOnTable(Cards * e, int whichOne);
 	// adds points to row
 	void addPointsAfterSettingOnTable(Cards * e);
-	// 
+	// checks what kind of ability card has and does its thing 
 	void checkAbility(Cards *e);
+	// what happens when checkAbility confirms a SPY
+	void CardWithSpyAbility(Cards * e);
+	//what happens when checkAbility confirms ALL4ONE
+	void CardWithAllForOneAbility(Cards *e);
 	// tells score in the end of a round
-	void pointScore();
+	void viewPointScore();
 	~Logic();
 };
 
