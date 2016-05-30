@@ -3,9 +3,6 @@
 Logic::Logic()
 {
 	endOfRound = false;
-	ifcurtain = true;
-	mPosition.x = 0;
-	mPosition.y = 0;
 	whosTurn = STUDENT_TEAM;
 
 	passStudents = false;
@@ -19,6 +16,12 @@ Logic::Logic()
 	TeachersRangedPoints = 0;
 	TeachersSiegePoints = 0;
 
+	TeacherScore = 0;
+	StudentScore = 0;
+
+	sizeOfStudent = 10;
+	sizeOfTeacher = 10;
+
 	font = NULL;
 	font = TTF_OpenFont("Bolditalic.ttf", 800);
 	if (font == NULL)
@@ -26,6 +29,7 @@ Logic::Logic()
 		printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
 	}
 	fontColor = { 1, 1, 1 };
+	cardNumberColor = { 255, 165, 0 };
 
 	StudentMeleePointSurface = NULL;
 	StudentRangedPointSurface = NULL;
@@ -34,6 +38,12 @@ Logic::Logic()
 	teachersRangedPointSurface = NULL;
 	teachersSiegePointSurface = NULL;
 
+	StudentScoreSurface=NULL;
+	TeacherScoreSufrace=NULL;
+
+	sizeOfStudentSurface = NULL;
+	sizeOfTeacherSurface = NULL;
+
 	StudentMeleePointTexture = NULL;
 	StudentRangedPointTexture = NULL;
 	StudentSiegePointTexture = NULL;
@@ -41,13 +51,27 @@ Logic::Logic()
 	teachersRangedPointSurface = NULL;
 	teachersSiegePointSurface = NULL;
 
-	rect_StudentMeleePoint = { 430, ROW_STUDENTS_MELEE+30, 30, 30 };
-	rect_StudentRangedPoint = { 430, ROW_STUDENTS_RANGED+30, 30, 30 };
+	StudentScoreTexture=NULL;
+    TeacherScoreTexture=NULL;
+
+	sizeOfStudentTexture = NULL;
+	sizeOfTeacherTexture = NULL;
+
+
+	rect_StudentMeleePoint = { 430, ROW_STUDENTS_MELEE+32, 30, 30 };
+	rect_StudentRangedPoint = { 430, ROW_STUDENTS_RANGED+28, 30, 30 };
 	rect_StudentSiegePoint = { 430, ROW_STUDENTS_SIEGE+30, 30, 30 };
 	rect_TeachersMeleePoint = { 430, ROW_TEACHERS_MELEE+35, 30, 30 };
 	rect_TeachersRangedPoint = { 430, ROW_TEACHERS_RANGED+30, 30, 30 };
 	rect_TeachersSiegePoint = { 430, ROW_TEACHERS_SIEGE+30, 30, 30 };
+
+	rect_TeacherScore = { 362, 264, 30, 30 };
+	rect_StudentScore = { 362, 597, 30, 30 };
+
+	rect_sizeOfStudent = { 230, 577, 30, 30 }; 
+	rect_sizeOfTeacher = { 230, 295, 30, 30 };
 }
+
 void Logic::playerPass()
 {
 	switch (visible)
@@ -56,16 +80,19 @@ void Logic::playerPass()
 	{
 						  visible = STUDENT_TEAM;
 						  passTeachers = true;
+						  whichCurtain = CURTAIN_TEACHERPASS;
 						  break;
 	}
 	case STUDENT_TEAM:
 	{
 						 visible = TEACHERS_TEAM;
 						 passStudents = true;
+						 whichCurtain = CURTAIN_STUDENTPASS;;
 						 break;
 	}
 	}
 }
+
 int Logic::getEvent(SDL_Event * e)
 {
 	while (SDL_PollEvent(e) != 0)
@@ -86,16 +113,20 @@ int Logic::getEvent(SDL_Event * e)
 								{
 									endOfRound = true;
 								}
+
 								if (endOfRound)
 								{
-									viewPointScore();
+									deciedeWhoWinsTheRound();
+									giveAllFieldCardsToUsed();
+									deleteAllBonuses();
+									reloadPoints();
 								}
 								return 1;
 
 				  }
 				  case 'y':
 				  {
-							 // ifcurtain = false;
+							  ifcurtain = false;
 							  break;
 				  }
 			}
@@ -104,7 +135,7 @@ int Logic::getEvent(SDL_Event * e)
 		{
 			int x, y;
 			SDL_GetMouseState(&x, &y);
-			if (!endOfRound)
+			if (!endOfRound || !ifcurtain)
 			{
 				ifclicked(x, y);
 				ifcurtain = true;
@@ -114,6 +145,7 @@ int Logic::getEvent(SDL_Event * e)
 	}
 	return 1;
 }
+
 void Logic::ifclicked(double _x, double _y)
 {
 	switch (visible)
@@ -144,6 +176,7 @@ void Logic::ifclicked(double _x, double _y)
 	}
 	}
 }
+
 void Logic::setOnTable(Cards * e, int whichOne)
 {
 	checkAbility(e); 
@@ -212,6 +245,7 @@ void Logic::setOnTable(Cards * e, int whichOne)
 							 whosTurn = TEACHERS_TEAM;
 							 visible = TEACHERS_TEAM;
 						 }
+						 sizeOfStudent = StudentsBase.size();
 						 break;
 
 	}
@@ -277,12 +311,14 @@ void Logic::setOnTable(Cards * e, int whichOne)
 							  whosTurn = STUDENT_TEAM;
 							  visible = STUDENT_TEAM;
 						  }
+						  sizeOfTeacher = TeachersBase.size();
 						  break;
 	}
 	}
 	reloadPoints(); // updates points if ability is used 
 	loadCounter(); // updates points
 }
+
 void Logic::addPointsAfterSettingOnTable(Cards * e)
 {
 	switch (e->getMembership())
@@ -317,6 +353,7 @@ void Logic::addPointsAfterSettingOnTable(Cards * e)
 							 }
 							 StudentsSiegePoints = allPoints;
 						 }
+						 StudentScore = StudentsMeleePoints + StudentsRangedPoints + StudentsSiegePoints;
 						 break;
 
 	}
@@ -349,10 +386,13 @@ void Logic::addPointsAfterSettingOnTable(Cards * e)
 							  }
 							  TeachersSiegePoints = allPoints;
 						  }
+						  TeacherScore = TeachersMeleePoints + TeachersRangedPoints + TeachersSiegePoints;
 						  break;
+						 
 	}
 	}
 }
+
 void Logic::checkAbility(Cards * e)
 {
 	switch (e->getAbility())
@@ -378,6 +418,7 @@ void Logic::checkAbility(Cards * e)
 	}
 	}
 }
+
 void Logic::CardWithSpyAbility(Cards * e)
 {
 	if (e->getMembership() == STUDENT_TEAM)
@@ -391,6 +432,7 @@ void Logic::CardWithSpyAbility(Cards * e)
 		drawOneCard(TEACHERS_TEAM);
 	}
 }
+
 void Logic::CardWithAllForOneAbility(Cards *e)
 {
 	switch (e->getMembership())
@@ -538,6 +580,7 @@ void Logic::CardWithAllForOneAbility(Cards *e)
 	}
 	}
 }
+
 void Logic::loadCounter()
 {
 	string pointsInString = to_string(StudentsMeleePoints);
@@ -546,6 +589,7 @@ void Logic::loadCounter()
 	StudentRangedPointSurface = TTF_RenderText_Solid(font, pointsInString.c_str(), fontColor);
 	pointsInString = to_string(StudentsSiegePoints);
 	StudentSiegePointSurface = TTF_RenderText_Solid(font, pointsInString.c_str(), fontColor);
+
 	pointsInString = to_string(TeachersMeleePoints);
 	teachersMeleePointSurface = TTF_RenderText_Solid(font, pointsInString.c_str(), fontColor);
 	pointsInString = to_string(TeachersRangedPoints);
@@ -553,13 +597,31 @@ void Logic::loadCounter()
 	pointsInString = to_string(TeachersSiegePoints);
 	teachersSiegePointSurface = TTF_RenderText_Solid(font, pointsInString.c_str(), fontColor);
 
+	pointsInString = to_string(TeacherScore);
+	TeacherScoreSufrace = TTF_RenderText_Solid(font, pointsInString.c_str(), fontColor);
+	pointsInString = to_string(StudentScore);
+	StudentScoreSurface = TTF_RenderText_Solid(font, pointsInString.c_str(), fontColor);
+
+	pointsInString = to_string(sizeOfStudent);
+	sizeOfStudentSurface = TTF_RenderText_Solid(font, pointsInString.c_str(), cardNumberColor);
+	pointsInString = to_string(sizeOfTeacher);
+	sizeOfTeacherSurface = TTF_RenderText_Solid(font, pointsInString.c_str(), cardNumberColor);
+
 	StudentMeleePointTexture = SDL_CreateTextureFromSurface(renderer, StudentMeleePointSurface);
 	StudentRangedPointTexture = SDL_CreateTextureFromSurface(renderer, StudentRangedPointSurface);
 	StudentSiegePointTexture = SDL_CreateTextureFromSurface(renderer, StudentSiegePointSurface);
+
 	teachersMeleePointTexture = SDL_CreateTextureFromSurface(renderer, teachersMeleePointSurface);
 	teachersRangedPointTexture = SDL_CreateTextureFromSurface(renderer, teachersRangedPointSurface);
 	teachersSiegePointTexture = SDL_CreateTextureFromSurface(renderer, teachersSiegePointSurface);
+
+	TeacherScoreTexture = SDL_CreateTextureFromSurface(renderer, TeacherScoreSufrace);
+	StudentScoreTexture = SDL_CreateTextureFromSurface(renderer, StudentScoreSurface);
+
+	sizeOfStudentTexture = SDL_CreateTextureFromSurface(renderer, sizeOfStudentSurface);
+	sizeOfTeacherTexture = SDL_CreateTextureFromSurface(renderer, sizeOfTeacherSurface);
 }
+
 void Logic::viewPointScore()
 {
 	SDL_RenderCopy(renderer, StudentMeleePointTexture, NULL, &rect_StudentMeleePoint);
@@ -568,11 +630,127 @@ void Logic::viewPointScore()
 	SDL_RenderCopy(renderer, teachersMeleePointTexture, NULL, &rect_TeachersMeleePoint);
 	SDL_RenderCopy(renderer, teachersRangedPointTexture, NULL, &rect_TeachersRangedPoint);
 	SDL_RenderCopy(renderer, teachersSiegePointTexture, NULL, &rect_TeachersSiegePoint);
+	SDL_RenderCopy(renderer, StudentScoreTexture, NULL, &rect_StudentScore);
+	SDL_RenderCopy(renderer, TeacherScoreTexture, NULL, &rect_TeacherScore);
+	SDL_RenderCopy(renderer, sizeOfStudentTexture, NULL, &rect_sizeOfStudent);
+	SDL_RenderCopy(renderer, sizeOfTeacherTexture, NULL, &rect_sizeOfTeacher);
 }
-bool Logic::getIfCurtain()
+
+void Logic::giveAllFieldCardsToUsed()
 {
-	return ifcurtain;
+	int size;
+
+	size = StudentsMelee.size() - 1;
+
+	for (int i = 0; i < size; i++)
+	{
+		StudentsUsed.push_back(StudentsMelee[i]);
+	}
+	for (int i = size; i >= 0; i--)
+	{
+		StudentsMelee.pop_back();
+	}
+	size = StudentsRanged.size() - 1;
+
+	for (int i = 0; i < size; i++)
+	{
+		StudentsUsed.push_back(StudentsRanged[i]);
+	}
+	for (int i = size; i >= 0; i--)
+	{
+		StudentsRanged.pop_back();
+	}
+	size = StudentsSiege.size() - 1;
+
+	for (int i = 0; i < size; i++)
+	{
+		StudentsUsed.push_back(StudentsSiege[i]);
+	}
+	for (int i = size; i >= 0; i--)
+	{
+		StudentsSiege.pop_back();
+	}
+	size = TeachersMelee.size() - 1;
+
+	for (int i = 0; i < size; i++)
+	{
+		TeachersUsed.push_back(TeachersMelee[i]);
+	}
+	for (int i = size; i >= 0; i--)
+	{
+		TeachersMelee.pop_back();
+	}
+	size = TeachersRanged.size() - 1;
+
+	for (int i = 0; i < size; i++)
+	{
+		TeachersUsed.push_back(TeachersRanged[i]);
+	}
+	for (int i = size; i >= 0; i--)
+	{
+		TeachersRanged.pop_back();
+	}
+	size = TeachersSiege.size() - 1;
+
+	for (int i = 0; i < size; i++)
+	{
+		TeachersUsed.push_back(TeachersSiege[i]);
+	}
+	for (int i = size; i >= 0; i--)
+	{
+		TeachersSiege.pop_back();
+	}
+	showAndSetCards();
 }
+
+void Logic::deleteAllBonuses()
+{
+	for (int i = 0; i < StudentsUsed.size(); i++)
+	{
+		StudentsUsed[i]->getOldPoints();
+	}
+	///////////////////////////////////////////////////////////TEACHER USED
+	for (int i = 0; i < TeachersUsed.size(); i++)
+	{
+		TeachersUsed[i]->getOldPoints();
+	}
+	reloadPoints();
+}
+
+void Logic::deciedeWhoWinsTheRound()
+{
+	if (TeacherScore >= StudentScore) // passive. if they have equal amount of points then teacher wins
+	{
+		ifcurtain = true;
+		whichCurtain = CURTAIN_TEACHERWIN;
+		cout << "wygral prowadzacy" << endl;
+		visible = TEACHERS_TEAM; // who wins has first move
+		round.whoWon = TEACHERS_TEAM;
+	}
+	else
+	{
+		ifcurtain = true;
+		whichCurtain = CURTAIN_STUDENTWIN;
+		drawOneCard(STUDENT_TEAM); // passive, when student wins he gets one additional card
+		sizeOfStudent = StudentsBase.size();
+		loadCounter();
+		cout << "wygral student" << endl;
+		visible = STUDENT_TEAM; // who wins has first move
+		round.whoWon = STUDENT_TEAM;
+	}
+	round.students = StudentScore;
+	round.teachers = TeacherScore;
+	score.push_back(round);
+
+	if (score.size() > 1)
+	{
+
+	}
+
+
+
+}
+
 Logic::~Logic()
 {
 		Students.clear();
@@ -627,7 +805,8 @@ Logic::~Logic()
 			TeachersUsed[i]->~Cards();
 		}
 		TeachersUsed.clear();
-		SDL_DestroyTexture(image_score);
+		SDL_DestroyTexture(image_studentsWin);
+		SDL_DestroyTexture(image_teachersWin);
 		SDL_DestroyTexture(image_studentsPass);
 		SDL_DestroyTexture(image_studentsTurn);
 		SDL_DestroyTexture(image_teachersTurn);
@@ -641,7 +820,14 @@ Logic::~Logic()
 		SDL_DestroyTexture(teachersRangedPointTexture);
 		SDL_DestroyTexture(teachersSiegePointTexture);
 
+		SDL_DestroyTexture(TeacherScoreTexture);
+		SDL_DestroyTexture(StudentScoreTexture);
+
+		SDL_DestroyTexture(sizeOfStudentTexture);
+		SDL_DestroyTexture(sizeOfTeacherTexture);
+
 		SDL_DestroyWindow(window);
 		SDL_DestroyRenderer(renderer);
 }
+
 

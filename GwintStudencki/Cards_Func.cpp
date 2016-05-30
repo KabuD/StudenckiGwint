@@ -21,6 +21,7 @@ Cards::Cards(int _index, string _path, int _points, int _type, int _membership, 
 	ability = _ability;
 	membership = _membership;
 }
+
 void Cards::loadCardTexture(SDL_Renderer*_renderer)
 {
 	card_image = NULL;
@@ -31,6 +32,7 @@ void Cards::loadCardTexture(SDL_Renderer*_renderer)
 		system("PAUSE");
 	}
 }
+
 void Cards::drawCard(SDL_Renderer *_renderer)
 {
 	SDL_RenderCopy(_renderer, card_image, NULL, &card_rect);
@@ -38,6 +40,7 @@ void Cards::drawCard(SDL_Renderer *_renderer)
 	if (ability){ SDL_RenderCopy(_renderer, card_ability, NULL, &ability_rect); }
 	SDL_RenderCopy(_renderer, card_type, NULL, &type_rect);
 }
+
 void Cards::loadPoints(SDL_Renderer * _renderer)
 {
 	string cards = "karty/punkty/";
@@ -48,18 +51,14 @@ void Cards::loadPoints(SDL_Renderer * _renderer)
 	card_points = NULL;
 	card_points = IMG_LoadTexture(_renderer, cards.c_str());
 
-	cout << cards << endl;
+	
 	cards = "karty/type/";
 	ToString = to_string(type);
 	cards.append(ToString); 
 	cards.append(png);
 	card_type = NULL;
 	card_type = IMG_LoadTexture(_renderer, cards.c_str());
-	if (card_type == NULL)
-	{
-		cout << "cos jest nie tak";
-	}
-	cout << cards<<endl;
+	
 	if (ability)
 	{
 		cards = "karty/ability/";
@@ -68,9 +67,9 @@ void Cards::loadPoints(SDL_Renderer * _renderer)
 		cards.append(png);
 		card_ability = NULL;
 		card_ability = IMG_LoadTexture(_renderer, cards.c_str());
-		cout << cards<<endl;
 	}
 }
+
 void Cards::changePosInRow(double _x)
 {
 	card_rect.x = _x;
@@ -78,6 +77,7 @@ void Cards::changePosInRow(double _x)
 	ability_rect.x = _x + 35;
 	type_rect.x = _x;
 }
+
 void Cards::changeRow(double _y)
 {
 	card_rect.y = _y;
@@ -85,39 +85,53 @@ void Cards::changeRow(double _y)
 	ability_rect.y = _y+70;
 	type_rect.y = _y+70;
 }
+
 int Cards::getX()
 {
 	return card_rect.x;
 }
+
 int Cards::getY()
 {
 	return card_rect.y;
 }
+
 int Cards::getMembership()
 {
 	return membership;
 }
+
 void Cards::changeMembership()
 {
 	if (membership == STUDENT_TEAM)membership = TEACHERS_TEAM;
 	else membership = STUDENT_TEAM;
 }
+
 void Cards::multiplyPoints(int howMany)
 {
 	points = original_points * pow(2,howMany);
 }
+
+void Cards::getOldPoints()
+{
+	points = original_points;
+}
+
 int Cards::getType()
 {
 	return type;
 }
+
 string Cards::getName()
 {
 	return path;
 }
+
 int Cards::getPoints()
 {
 	return points;
 }
+
 int Cards::getAbility()
 {
 	return ability;

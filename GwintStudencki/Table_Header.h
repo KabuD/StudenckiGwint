@@ -6,6 +6,8 @@
 bool ifDrawed(int iLiczba, int tab[], int ile);
 int howToSetupBase(int howBigVector, int whichI);
 int howToSetupEverythingElse(int howBigVector, int whichI);
+
+
 class Table
 {
 protected:
@@ -14,7 +16,8 @@ protected:
 	SDL_Renderer *renderer;
 	SDL_Window* window;
 
-	SDL_Texture * image_score;
+	SDL_Texture * image_teachersWin;
+	SDL_Texture * image_studentsWin;
 
 	SDL_Texture * image_teachersTurn;
 	SDL_Texture * image_teachersPass;
@@ -28,6 +31,8 @@ protected:
 
 	int whosTurn; // operates which team can use the card
 	int visible; // operates which cards are visible on screen. changing on space in 'Logic'
+	bool ifcurtain;
+	int whichCurtain;
 
 	// to make sure that cards arent being moved indefinetly in loadCard func
 	bool doneStudentBase;
@@ -73,7 +78,7 @@ public:
 	void loadStudentsCards();
 	// chooses cards for teachers deck
 	void loadTeachersCards();
-	//func used after using spy
+	//func used after using spy or winned round
 	void drawOneCard(int whichTeam);
 	//loads texture for each card
 	void loadTableTexture();

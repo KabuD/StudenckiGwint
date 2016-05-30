@@ -29,7 +29,7 @@ int main(int argc, char* args[])
 		gwent.showBackground();
 		gwent.showAndSetCards();
 		gwent.viewPointScore();
-		gwent.showCurtain(1);
+	   // gwent.showCurtain(gwent.returnCurtain());
 		SDL_RenderPresent(gwent.getRenderer());
 
 

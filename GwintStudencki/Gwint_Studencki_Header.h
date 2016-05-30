@@ -13,23 +13,29 @@
 
 using namespace std;
 
-const int WINDOW_WIDTH=1600;
-const int WINDOW_HEIGHT=900;
-const int WINDOW_x=200;
+const int WINDOW_WIDTH=1280;
+const int WINDOW_HEIGHT=820;
+const int WINDOW_x=100;
 const int WINDOW_y=-900;
 
 const int TEACHERS_TEAM = 1;
 const int STUDENT_TEAM = 2;
-const int NOT_VISIBLE_CARD = 0;
-const int VISIBLE_CARD = 1;
+
 const int ABILITY_NONE = 0;
 const int ABILITY_ALL4ONE = 1;
 const int ABILITY_SPY = 2;
 const int ABILITY_MEDIC = 3;
+
 const int TYPE_MELEE = 1;
 const int TYPE_RANGED = 2;
 const int TYPE_SIEGE = 3;
 
+const int CURTAIN_TEACHERPASS = 1;
+const int CURTAIN_STUDENTPASS = 2;
+const int CURTAIN_STUDENTTUNR = 3;
+const int CURTAIN_TEACHERTURN = 4;
+const int CURTAIN_STUDENTWIN = 5;
+const int CURTAIN_TEACHERWIN = 6;
 
 const int ROW_TEACHERS_SIEGE = 14;
 const int ROW_TEACHERS_RANGED = 124;
