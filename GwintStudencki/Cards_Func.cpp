@@ -10,6 +10,9 @@ Cards::Cards(int _index, string _path, int _points, int _type, int _membership, 
 	point_rect.y = 0;
 	point_rect.w = 30;
 	point_rect.h= 30;
+	ability_rect = { 0, 0, 30, 30 };
+	type_rect = { 0, 0, 30, 30 };
+
 	index = _index;
 	path = _path;
 	points = _points;
@@ -32,26 +35,55 @@ void Cards::drawCard(SDL_Renderer *_renderer)
 {
 	SDL_RenderCopy(_renderer, card_image, NULL, &card_rect);
 	SDL_RenderCopy(_renderer, card_points, NULL, &point_rect);
+	if (ability){ SDL_RenderCopy(_renderer, card_ability, NULL, &ability_rect); }
+	SDL_RenderCopy(_renderer, card_type, NULL, &type_rect);
 }
 void Cards::loadPoints(SDL_Renderer * _renderer)
 {
 	string cards = "karty/punkty/";
 	string png = ".png";
-    string pointsInString = to_string(points);
-    cards.append(pointsInString); // karty/punkty/"points"
+    string ToString = to_string(points);
+    cards.append(ToString); // karty/punkty/"points"
 	cards.append(png);// karty/punkty/"points".png
 	card_points = NULL;
 	card_points = IMG_LoadTexture(_renderer, cards.c_str());
+
+	cout << cards << endl;
+	cards = "karty/type/";
+	ToString = to_string(type);
+	cards.append(ToString); 
+	cards.append(png);
+	card_type = NULL;
+	card_type = IMG_LoadTexture(_renderer, cards.c_str());
+	if (card_type == NULL)
+	{
+		cout << "cos jest nie tak";
+	}
+	cout << cards<<endl;
+	if (ability)
+	{
+		cards = "karty/ability/";
+		ToString = to_string(ability);
+		cards.append(ToString);
+		cards.append(png);
+		card_ability = NULL;
+		card_ability = IMG_LoadTexture(_renderer, cards.c_str());
+		cout << cards<<endl;
+	}
 }
 void Cards::changePosInRow(double _x)
 {
 	card_rect.x = _x;
 	point_rect.x = _x;
+	ability_rect.x = _x + 35;
+	type_rect.x = _x;
 }
 void Cards::changeRow(double _y)
 {
 	card_rect.y = _y;
 	point_rect.y = _y;
+	ability_rect.y = _y+70;
+	type_rect.y = _y+70;
 }
 int Cards::getX()
 {

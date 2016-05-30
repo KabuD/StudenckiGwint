@@ -83,6 +83,7 @@
     <ClCompile Include="Table_Func.cpp" />
     <ClCompile Include="Gwint_Studencki.cpp" />
     <ClCompile Include="Logic_Func.cpp" />
+    <ClCompile Include="Timer_Func.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cards_Header.h" />

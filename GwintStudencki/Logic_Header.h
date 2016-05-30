@@ -16,6 +16,32 @@ private:
 
 	bool passStudents;
 	bool passTeachers;
+
+	TTF_Font * font;
+	SDL_Color fontColor;
+
+	SDL_Surface* StudentMeleePointSurface;
+	SDL_Surface* StudentRangedPointSurface;
+	SDL_Surface* StudentSiegePointSurface;
+	SDL_Surface* teachersMeleePointSurface;
+	SDL_Surface* teachersRangedPointSurface;
+	SDL_Surface* teachersSiegePointSurface;
+
+	SDL_Texture*  StudentMeleePointTexture;
+	SDL_Texture*  StudentRangedPointTexture;
+	SDL_Texture*  StudentSiegePointTexture;
+	SDL_Texture*  teachersMeleePointTexture;
+	SDL_Texture*  teachersRangedPointTexture;
+	SDL_Texture*  teachersSiegePointTexture;
+
+	SDL_Rect rect_StudentMeleePoint;
+	SDL_Rect rect_StudentRangedPoint;
+	SDL_Rect rect_StudentSiegePoint;
+	SDL_Rect rect_TeachersMeleePoint;
+	SDL_Rect rect_TeachersRangedPoint;
+	SDL_Rect rect_TeachersSiegePoint;
+
+
 public:
 	Logic();
 	//checks if theres "curtain" on screen. used in main 
@@ -36,6 +62,8 @@ public:
 	void CardWithSpyAbility(Cards * e);
 	//what happens when checkAbility confirms ALL4ONE
 	void CardWithAllForOneAbility(Cards *e);
+	//loads
+	void loadCounter();
 	// tells score in the end of a round
 	void viewPointScore();
 	~Logic();

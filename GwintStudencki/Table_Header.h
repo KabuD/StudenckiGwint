@@ -4,7 +4,8 @@
 #include "Cards_Header.h"
 
 bool ifDrawed(int iLiczba, int tab[], int ile);
-
+int howToSetupBase(int howBigVector, int whichI);
+int howToSetupEverythingElse(int howBigVector, int whichI);
 class Table
 {
 protected:
@@ -69,9 +70,9 @@ public:
 	Table();
 	
 	//chooses cards for students deck
-	void drawingStudentsCards();
+	void loadStudentsCards();
 	// chooses cards for teachers deck
-	void drawingTeachersCards();
+	void loadTeachersCards();
 	//func used after using spy
 	void drawOneCard(int whichTeam);
 	//loads texture for each card

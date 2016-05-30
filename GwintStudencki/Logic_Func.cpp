@@ -19,6 +19,34 @@ Logic::Logic()
 	TeachersRangedPoints = 0;
 	TeachersSiegePoints = 0;
 
+	font = NULL;
+	font = TTF_OpenFont("Bolditalic.ttf", 800);
+	if (font == NULL)
+	{
+		printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
+	}
+	fontColor = { 1, 1, 1 };
+
+	StudentMeleePointSurface = NULL;
+	StudentRangedPointSurface = NULL;
+	StudentSiegePointSurface = NULL;
+	teachersMeleePointSurface = NULL;
+	teachersRangedPointSurface = NULL;
+	teachersSiegePointSurface = NULL;
+
+	StudentMeleePointTexture = NULL;
+	StudentRangedPointTexture = NULL;
+	StudentSiegePointTexture = NULL;
+	teachersMeleePointTexture = NULL;
+	teachersRangedPointSurface = NULL;
+	teachersSiegePointSurface = NULL;
+
+	rect_StudentMeleePoint = { 430, ROW_STUDENTS_MELEE+30, 30, 30 };
+	rect_StudentRangedPoint = { 430, ROW_STUDENTS_RANGED+30, 30, 30 };
+	rect_StudentSiegePoint = { 430, ROW_STUDENTS_SIEGE+30, 30, 30 };
+	rect_TeachersMeleePoint = { 430, ROW_TEACHERS_MELEE+35, 30, 30 };
+	rect_TeachersRangedPoint = { 430, ROW_TEACHERS_RANGED+30, 30, 30 };
+	rect_TeachersSiegePoint = { 430, ROW_TEACHERS_SIEGE+30, 30, 30 };
 }
 void Logic::playerPass()
 {
@@ -67,7 +95,7 @@ int Logic::getEvent(SDL_Event * e)
 				  }
 				  case 'y':
 				  {
-							  ifcurtain = false;
+							 // ifcurtain = false;
 							  break;
 				  }
 			}
@@ -253,6 +281,7 @@ void Logic::setOnTable(Cards * e, int whichOne)
 	}
 	}
 	reloadPoints(); // updates points if ability is used 
+	loadCounter(); // updates points
 }
 void Logic::addPointsAfterSettingOnTable(Cards * e)
 {
@@ -284,7 +313,7 @@ void Logic::addPointsAfterSettingOnTable(Cards * e)
 							 int allPoints = 0;
 							 for (int i = 0; i < StudentsSiege.size(); i++)
 							 {
-								 allPoints += StudentsRanged[i]->getPoints();
+								 allPoints += StudentsSiege[i]->getPoints();
 							 }
 							 StudentsSiegePoints = allPoints;
 						 }
@@ -509,19 +538,36 @@ void Logic::CardWithAllForOneAbility(Cards *e)
 	}
 	}
 }
+void Logic::loadCounter()
+{
+	string pointsInString = to_string(StudentsMeleePoints);
+	StudentMeleePointSurface = TTF_RenderText_Solid(font, pointsInString.c_str(), fontColor);
+	pointsInString = to_string(StudentsRangedPoints);
+	StudentRangedPointSurface = TTF_RenderText_Solid(font, pointsInString.c_str(), fontColor);
+	pointsInString = to_string(StudentsSiegePoints);
+	StudentSiegePointSurface = TTF_RenderText_Solid(font, pointsInString.c_str(), fontColor);
+	pointsInString = to_string(TeachersMeleePoints);
+	teachersMeleePointSurface = TTF_RenderText_Solid(font, pointsInString.c_str(), fontColor);
+	pointsInString = to_string(TeachersRangedPoints);
+	teachersRangedPointSurface = TTF_RenderText_Solid(font, pointsInString.c_str(), fontColor);
+	pointsInString = to_string(TeachersSiegePoints);
+	teachersSiegePointSurface = TTF_RenderText_Solid(font, pointsInString.c_str(), fontColor);
+
+	StudentMeleePointTexture = SDL_CreateTextureFromSurface(renderer, StudentMeleePointSurface);
+	StudentRangedPointTexture = SDL_CreateTextureFromSurface(renderer, StudentRangedPointSurface);
+	StudentSiegePointTexture = SDL_CreateTextureFromSurface(renderer, StudentSiegePointSurface);
+	teachersMeleePointTexture = SDL_CreateTextureFromSurface(renderer, teachersMeleePointSurface);
+	teachersRangedPointTexture = SDL_CreateTextureFromSurface(renderer, teachersRangedPointSurface);
+	teachersSiegePointTexture = SDL_CreateTextureFromSurface(renderer, teachersSiegePointSurface);
+}
 void Logic::viewPointScore()
 {
-	cout << "Teachers Melee: " << TeachersMeleePoints << endl;
-	cout << "Teachers Ranged: " << TeachersRangedPoints << endl;
-	cout << "Teachers Siege: " << TeachersSiegePoints << endl;
-	cout << "Students Melee: " << StudentsMeleePoints << endl;
-	cout << "Students Ranged: " << StudentsRangedPoints << endl;
-	cout << "Students Siege: " << StudentsSiegePoints << endl;
-
-
-
-
-
+	SDL_RenderCopy(renderer, StudentMeleePointTexture, NULL, &rect_StudentMeleePoint);
+	SDL_RenderCopy(renderer, StudentRangedPointTexture, NULL, &rect_StudentRangedPoint);
+	SDL_RenderCopy(renderer, StudentSiegePointTexture, NULL, &rect_StudentSiegePoint);
+	SDL_RenderCopy(renderer, teachersMeleePointTexture, NULL, &rect_TeachersMeleePoint);
+	SDL_RenderCopy(renderer, teachersRangedPointTexture, NULL, &rect_TeachersRangedPoint);
+	SDL_RenderCopy(renderer, teachersSiegePointTexture, NULL, &rect_TeachersSiegePoint);
 }
 bool Logic::getIfCurtain()
 {
@@ -586,6 +632,15 @@ Logic::~Logic()
 		SDL_DestroyTexture(image_studentsTurn);
 		SDL_DestroyTexture(image_teachersTurn);
 		SDL_DestroyTexture(image_teachersPass);
+
+		SDL_DestroyTexture(StudentMeleePointTexture);
+		SDL_DestroyTexture(StudentRangedPointTexture);
+		SDL_DestroyTexture(StudentSiegePointTexture);
+
+		SDL_DestroyTexture(teachersMeleePointTexture);
+		SDL_DestroyTexture(teachersRangedPointTexture);
+		SDL_DestroyTexture(teachersSiegePointTexture);
+
 		SDL_DestroyWindow(window);
 		SDL_DestroyRenderer(renderer);
 }
