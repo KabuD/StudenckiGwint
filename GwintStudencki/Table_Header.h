@@ -28,11 +28,11 @@ protected:
 	SDL_Texture * back;
 
 	SDL_Rect screen_rect;
+	SDL_Rect curtain_rect;
 
 	int whosTurn; // operates which team can use the card
 	int visible; // operates which cards are visible on screen. changing on space in 'Logic'
-	bool ifcurtain;
-	int whichCurtain;
+
 
 	// to make sure that cards arent being moved indefinetly in loadCard func
 	bool doneStudentBase;
@@ -91,7 +91,6 @@ public:
 	//getting renderer to main
 	SDL_Renderer * getRenderer();
 	//gets curtain on screen after certain actions
-	void showCurtain(int whichOne);
 	void loadBackgroundAndCurtains();
 
 

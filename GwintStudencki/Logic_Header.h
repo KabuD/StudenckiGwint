@@ -32,6 +32,10 @@ private:
 
 	bool passStudents;
 	bool passTeachers;
+	int passCount;
+
+	bool ifcurtain;
+	int whichCurtain;
 
 	TTF_Font * font;
 	SDL_Color fontColor;
@@ -84,6 +88,10 @@ public:
 	Logic();
 	//when someone pushes space
 	void playerPass();
+	//when someone clicks on card
+	void playerChange();
+
+	void checkIfEndRound();
 	// handles mouse, game ending and keyboard
 	int getEvent(SDL_Event * e);
 	//
@@ -91,6 +99,9 @@ public:
 	{
 		return whichCurtain;
 	}
+//
+	void loadCurtains();
+	void showCurtain(int whichOne);
 	// chceck if and what card was clicked
 	void ifclicked(double _x, double _y);
 	// puts card on it's designated place
@@ -113,6 +124,7 @@ public:
 	void deleteAllBonuses();
 	// activates when studenpass & teacherpass
 	void deciedeWhoWinsTheRound();
+	//checks if theres end of round 
 	~Logic();
 };
 

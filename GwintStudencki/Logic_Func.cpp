@@ -7,7 +7,7 @@ Logic::Logic()
 
 	passStudents = false;
 	passTeachers = false;
-
+	passCount = 0;
 
 	StudentsMeleePoints = 0;
 	StudentsRangedPoints = 0;
@@ -21,6 +21,9 @@ Logic::Logic()
 
 	sizeOfStudent = 10;
 	sizeOfTeacher = 10;
+
+	ifcurtain = true;
+	whichCurtain = CURTAIN_STUDENTTUNR;
 
 	font = NULL;
 	font = TTF_OpenFont("Bolditalic.ttf", 800);
@@ -74,22 +77,118 @@ Logic::Logic()
 
 void Logic::playerPass()
 {
-	switch (visible)
+	switch (passCount)
 	{
-	case TEACHERS_TEAM:
+	case 0:
 	{
-						  visible = STUDENT_TEAM;
-						  passTeachers = true;
-						  whichCurtain = CURTAIN_TEACHERPASS;
-						  break;
+			  switch (visible)
+			  {
+			  case TEACHERS_TEAM:
+			  {
+									ifcurtain = true;
+									whichCurtain = CURTAIN_TEACHERPASS;
+									visible = STUDENT_TEAM;
+									passTeachers = true;
+									break;
+			  }
+			  case STUDENT_TEAM:
+			  {
+								   ifcurtain = true;
+								   whichCurtain = CURTAIN_STUDENTPASS;
+								   visible = TEACHERS_TEAM;
+								   passStudents = true;
+								   break;
+			  }
+			  }
+			  passCount = 1;
+			  break;
 	}
-	case STUDENT_TEAM:
+	case 1:
 	{
-						 visible = TEACHERS_TEAM;
-						 passStudents = true;
-						 whichCurtain = CURTAIN_STUDENTPASS;;
-						 break;
+			  passCount = 2;
+			  break;
 	}
+	}
+	cout << "Curtain: " << whichCurtain << endl;
+	cout << "IfCurtain" << ifcurtain << endl;
+}
+
+void Logic::playerChange()
+{
+	if (!passStudents && !passTeachers) // if both teams didnt push space
+	{
+		switch (visible)
+		{
+		case TEACHERS_TEAM:
+		{
+							  ifcurtain = true;
+							  whichCurtain = CURTAIN_STUDENTTUNR;
+							  visible = STUDENT_TEAM;
+							  break;
+		}
+		case STUDENT_TEAM:
+		{
+							 ifcurtain = true;
+							 whichCurtain = CURTAIN_TEACHERTURN;
+							 visible = TEACHERS_TEAM;
+							 break;
+		}
+		}
+	}
+	if (passStudents) // if student pushed space
+	{
+		visible = TEACHERS_TEAM;
+	}
+	if (passTeachers) // if teacher pushed space
+	{
+		visible = STUDENT_TEAM;
+	}
+}
+
+void Logic::checkIfEndRound()
+{
+	if (passCount==2)
+	{
+		deciedeWhoWinsTheRound();
+		giveAllFieldCardsToUsed();
+		deleteAllBonuses();
+		reloadPoints();
+		passCount = 0;
+	}
+}
+
+void Logic::loadCurtains()
+{
+	curtain_rect = { -120, 0, 1600, 900 };
+
+	image_studentsWin = NULL;
+	image_studentsWin = IMG_LoadTexture(renderer, "karty/curtain/studentwin.png");
+	image_teachersWin = NULL;
+	image_teachersWin = IMG_LoadTexture(renderer, "karty/curtain/prowadzacywin.png");
+
+
+	image_teachersTurn = NULL;
+	image_teachersTurn = IMG_LoadTexture(renderer, "karty/curtain/prowadzacysturn.png");
+	image_teachersPass = NULL;
+	image_teachersPass = IMG_LoadTexture(renderer, "karty/curtain/prowadzacypass.png");
+
+	image_studentsTurn = NULL;
+	image_studentsTurn = IMG_LoadTexture(renderer, "karty/curtain/studentsturn.png");
+	image_studentsPass = NULL;
+	image_studentsPass = IMG_LoadTexture(renderer, "karty/curtain/studentpass.png");
+
+}
+
+void Logic::showCurtain(int whichOne)
+{
+	if (ifcurtain)
+	{
+		if (whichOne == CURTAIN_TEACHERPASS){ SDL_RenderCopy(renderer, image_teachersPass, NULL, &curtain_rect); }
+		if (whichOne == CURTAIN_STUDENTPASS){ SDL_RenderCopy(renderer, image_studentsPass, NULL, &curtain_rect); }
+		if (whichOne == CURTAIN_STUDENTTUNR){ SDL_RenderCopy(renderer, image_studentsTurn, NULL, &curtain_rect); }
+		if (whichOne == CURTAIN_TEACHERTURN){ SDL_RenderCopy(renderer, image_teachersTurn, NULL, &curtain_rect); }
+		if (whichOne == CURTAIN_STUDENTWIN){ SDL_RenderCopy(renderer, image_studentsWin, NULL, &curtain_rect); }
+		if (whichOne == CURTAIN_TEACHERWIN){ SDL_RenderCopy(renderer, image_teachersWin, NULL, &curtain_rect); }
 	}
 }
 
@@ -104,24 +203,13 @@ int Logic::getEvent(SDL_Event * e)
 			      case 27: // esc
 			{
 					   return 0;
+					   break;
 			}
 				  case ' ': //spacja
 				  {
-
-								playerPass();
-								if (passStudents && passTeachers)
-								{
-									endOfRound = true;
-								}
-
-								if (endOfRound)
-								{
-									deciedeWhoWinsTheRound();
-									giveAllFieldCardsToUsed();
-									deleteAllBonuses();
-									reloadPoints();
-								}
-								return 1;
+						
+							if(!ifcurtain) playerPass();
+							break;
 
 				  }
 				  case 'y':
@@ -135,10 +223,9 @@ int Logic::getEvent(SDL_Event * e)
 		{
 			int x, y;
 			SDL_GetMouseState(&x, &y);
-			if (!endOfRound || !ifcurtain)
+			if (!endOfRound && !ifcurtain) // if not end of round and no curtain on screen 
 			{
 				ifclicked(x, y);
-				ifcurtain = true;
 			}
 			return 1;
 		}
@@ -157,6 +244,7 @@ void Logic::ifclicked(double _x, double _y)
 							  if (TeachersBase[i]->getX()<_x && TeachersBase[i]->getX() + 100>_x && TeachersBase[i]->getY() < _y && TeachersBase[i]->getY() - 100 < _y)
 							  {
 								  setOnTable(TeachersBase[i], i);
+								  playerChange();
 								  break;
 							  }
 						  }
@@ -169,6 +257,7 @@ void Logic::ifclicked(double _x, double _y)
 							 if (StudentsBase[i]->getX()<_x && StudentsBase[i]->getX() + 100>_x && StudentsBase[i]->getY() < _y && StudentsBase[i]->getY() - 100 < _y)
 							 {
 								 setOnTable(StudentsBase[i], i);
+								 playerChange();
 								 break;
 							 }
 						 }
@@ -239,12 +328,6 @@ void Logic::setOnTable(Cards * e, int whichOne)
 							 StudentsBase.erase(StudentsBase.begin() + whichOne);
 							 doneStudentBase = false;
 						 }
-						 if (!passTeachers)
-						 {
-
-							 whosTurn = TEACHERS_TEAM;
-							 visible = TEACHERS_TEAM;
-						 }
 						 sizeOfStudent = StudentsBase.size();
 						 break;
 
@@ -306,17 +389,14 @@ void Logic::setOnTable(Cards * e, int whichOne)
 							  TeachersBase.erase(TeachersBase.begin() + whichOne);
 							  doneTeachersBase = false;
 						  }
-						  if (!passStudents)
-						  {
-							  whosTurn = STUDENT_TEAM;
-							  visible = STUDENT_TEAM;
-						  }
 						  sizeOfTeacher = TeachersBase.size();
 						  break;
 	}
 	}
 	reloadPoints(); // updates points if ability is used 
 	loadCounter(); // updates points
+	if (TeachersBase.size() == 0) passTeachers = true;
+	if (StudentsBase.size() == 0) passStudents = true;
 }
 
 void Logic::addPointsAfterSettingOnTable(Cards * e)
@@ -640,67 +720,72 @@ void Logic::giveAllFieldCardsToUsed()
 {
 	int size;
 
-	size = StudentsMelee.size() - 1;
+	size = StudentsMelee.size();
 
 	for (int i = 0; i < size; i++)
 	{
 		StudentsUsed.push_back(StudentsMelee[i]);
 	}
-	for (int i = size; i >= 0; i--)
+	for (int i = size-1; i >= 0; i--)
 	{
 		StudentsMelee.pop_back();
 	}
-	size = StudentsRanged.size() - 1;
+
+	size = StudentsRanged.size();
 
 	for (int i = 0; i < size; i++)
 	{
 		StudentsUsed.push_back(StudentsRanged[i]);
 	}
-	for (int i = size; i >= 0; i--)
+	for (int i = size-1; i >= 0; i--)
 	{
 		StudentsRanged.pop_back();
 	}
-	size = StudentsSiege.size() - 1;
+	size = StudentsSiege.size();
 
 	for (int i = 0; i < size; i++)
 	{
 		StudentsUsed.push_back(StudentsSiege[i]);
 	}
-	for (int i = size; i >= 0; i--)
+	for (int i = size-1; i >= 0; i--)
 	{
 		StudentsSiege.pop_back();
 	}
-	size = TeachersMelee.size() - 1;
+	size = TeachersMelee.size();
 
 	for (int i = 0; i < size; i++)
 	{
 		TeachersUsed.push_back(TeachersMelee[i]);
 	}
-	for (int i = size; i >= 0; i--)
+	for (int i = size-1; i >= 0; i--)
 	{
 		TeachersMelee.pop_back();
 	}
-	size = TeachersRanged.size() - 1;
+	size = TeachersRanged.size();
 
 	for (int i = 0; i < size; i++)
 	{
 		TeachersUsed.push_back(TeachersRanged[i]);
 	}
-	for (int i = size; i >= 0; i--)
+	for (int i = size-1; i >= 0; i--)
 	{
 		TeachersRanged.pop_back();
 	}
-	size = TeachersSiege.size() - 1;
+	size = TeachersSiege.size();
 
 	for (int i = 0; i < size; i++)
 	{
 		TeachersUsed.push_back(TeachersSiege[i]);
 	}
-	for (int i = size; i >= 0; i--)
+	for (int i = size-1; i >= 0; i--)
 	{
 		TeachersSiege.pop_back();
 	}
+	doneTeachersUsed = false;
+	doneStudentsUsed = false;
 	showAndSetCards();
+	cout << TeachersUsed.size() << " TU" << endl;
+	cout << StudentsUsed.size() << " SU" << endl;
 }
 
 void Logic::deleteAllBonuses()
@@ -733,8 +818,6 @@ void Logic::deciedeWhoWinsTheRound()
 		whichCurtain = CURTAIN_STUDENTWIN;
 		drawOneCard(STUDENT_TEAM); // passive, when student wins he gets one additional card
 		sizeOfStudent = StudentsBase.size();
-		loadCounter();
-		cout << "wygral student" << endl;
 		visible = STUDENT_TEAM; // who wins has first move
 		round.whoWon = STUDENT_TEAM;
 	}
@@ -742,13 +825,23 @@ void Logic::deciedeWhoWinsTheRound()
 	round.teachers = TeacherScore;
 	score.push_back(round);
 
-	if (score.size() > 1)
-	{
+	StudentsMeleePoints = 0;
+	StudentsRangedPoints = 0;
+	StudentsSiegePoints = 0;
 
-	}
+	TeachersMeleePoints = 0;
+	TeachersRangedPoints = 0;
+	TeachersSiegePoints = 0;
 
+	StudentScore = 0;
+	TeacherScore = 0;
 
+	loadCounter();
+	
 
+	endOfRound = false;
+	passStudents = false;
+	passTeachers = false;
 }
 
 Logic::~Logic()
