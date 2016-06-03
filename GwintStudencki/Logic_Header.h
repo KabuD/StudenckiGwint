@@ -5,7 +5,6 @@ struct RoundScore
 {
 	int teachers;
 	int students;
-	int whoWon;
 };
 
 class Logic : public Table
@@ -15,6 +14,7 @@ private:
 	vector<RoundScore>score;
 	RoundScore round;
 	bool endOfRound;
+	bool endGAME;
 
 	int StudentsMeleePoints;
 	int StudentsRangedPoints;
@@ -33,6 +33,9 @@ private:
 	bool passStudents;
 	bool passTeachers;
 	int passCount;
+
+	int SWonRounds;
+	int TWonRounds;
 
 	bool ifcurtain;
 	int whichCurtain;
@@ -83,24 +86,23 @@ private:
 	SDL_Rect rect_sizeOfStudent;
 	SDL_Rect rect_sizeOfTeacher;
 
-
 public:
 	Logic();
 	//when someone pushes space
 	void playerPass();
 	//when someone clicks on card
 	void playerChange();
-
+	//if passCount =2 then it does the endround thing 
 	void checkIfEndRound();
+	//if score.size() is at least 2 it checks if someone won and if it should end the game
+	void checkIfEndGame();
 	// handles mouse, game ending and keyboard
 	int getEvent(SDL_Event * e);
-	//
-	int returnCurtain()
-	{
-		return whichCurtain;
-	}
-//
+	//returns which curtain should be displayed
+	int returnCurtain();
+    //loads images needed for curtains
 	void loadCurtains();
+	//func for showin curtain in main loop
 	void showCurtain(int whichOne);
 	// chceck if and what card was clicked
 	void ifclicked(double _x, double _y);

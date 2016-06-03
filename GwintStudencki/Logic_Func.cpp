@@ -3,6 +3,7 @@
 Logic::Logic()
 {
 	endOfRound = false;
+	endGAME = false;
 	whosTurn = STUDENT_TEAM;
 
 	passStudents = false;
@@ -22,8 +23,11 @@ Logic::Logic()
 	sizeOfStudent = 10;
 	sizeOfTeacher = 10;
 
+	SWonRounds = 0;
+	TWonRounds = 0;
+
 	ifcurtain = true;
-	whichCurtain = CURTAIN_STUDENTTUNR;
+	whichCurtain = CURTAIN_STUDENTTURN;
 
 	font = NULL;
 	font = TTF_OpenFont("Bolditalic.ttf", 800);
@@ -122,7 +126,7 @@ void Logic::playerChange()
 		case TEACHERS_TEAM:
 		{
 							  ifcurtain = true;
-							  whichCurtain = CURTAIN_STUDENTTUNR;
+							  whichCurtain = CURTAIN_STUDENTTURN;
 							  visible = STUDENT_TEAM;
 							  break;
 		}
@@ -147,7 +151,7 @@ void Logic::playerChange()
 
 void Logic::checkIfEndRound()
 {
-	if (passCount==2)
+	if (passCount == 2)
 	{
 		deciedeWhoWinsTheRound();
 		giveAllFieldCardsToUsed();
@@ -157,25 +161,80 @@ void Logic::checkIfEndRound()
 	}
 }
 
+void Logic::checkIfEndGame()
+{
+	if (!endGAME) // to make sure this isn t made infinite times
+	{
+		if (SWonRounds == 2 || TWonRounds == 2)
+		{
+			if (score.size() == 3)
+			{
+				StudentsMeleePoints = score[0].students;
+				TeachersMeleePoints = score[0].teachers;
+
+				StudentsRangedPoints = score[1].students;
+				TeachersRangedPoints = score[1].teachers;
+
+				StudentsSiegePoints = score[2].students;
+				TeachersSiegePoints = score[2].teachers;
+			}
+			if (score.size() == 2)
+			{
+				StudentsMeleePoints = score[0].students;
+				TeachersMeleePoints = score[0].teachers;
+
+				StudentsRangedPoints = score[1].students;
+				TeachersRangedPoints = score[1].teachers;
+
+				StudentsSiegePoints = 0;
+				TeachersSiegePoints = 0;
+			}
+			rect_StudentMeleePoint = { 760, 556, 30, 30 };
+			rect_TeachersMeleePoint = { 760, 500, 30, 30 };
+			rect_StudentRangedPoint = { 890, 556, 30, 30 };
+			rect_TeachersRangedPoint = { 890, 500, 30, 30 };
+			rect_StudentSiegePoint = { 1010, 556, 30, 30 };
+			rect_TeachersSiegePoint = { 1010, 500, 30, 30 };
+			loadCounter();
+			endGAME = true;
+		}
+	}
+	if (SWonRounds == 2)
+	{
+		SDL_RenderCopy(renderer, image_sWonGame, NULL, &curtain_rect);
+	}
+	if (TWonRounds == 2)
+	{
+		SDL_RenderCopy(renderer, image_tWonGame, NULL, &curtain_rect);
+	}
+}
+
 void Logic::loadCurtains()
 {
-	curtain_rect = { -120, 0, 1600, 900 };
+	curtain_rect = { 63, -43, 1600, 900 };
 
 	image_studentsWin = NULL;
-	image_studentsWin = IMG_LoadTexture(renderer, "karty/curtain/studentwin.png");
+	image_studentsWin = IMG_LoadTexture(renderer, "karty/curtain/swr.png");
+
 	image_teachersWin = NULL;
-	image_teachersWin = IMG_LoadTexture(renderer, "karty/curtain/prowadzacywin.png");
+	image_teachersWin = IMG_LoadTexture(renderer, "karty/curtain/twr.png");
 
 
 	image_teachersTurn = NULL;
-	image_teachersTurn = IMG_LoadTexture(renderer, "karty/curtain/prowadzacysturn.png");
+	image_teachersTurn = IMG_LoadTexture(renderer, "karty/curtain/tturn.png");
 	image_teachersPass = NULL;
-	image_teachersPass = IMG_LoadTexture(renderer, "karty/curtain/prowadzacypass.png");
+	image_teachersPass = IMG_LoadTexture(renderer, "karty/curtain/tpass.png");
 
 	image_studentsTurn = NULL;
-	image_studentsTurn = IMG_LoadTexture(renderer, "karty/curtain/studentsturn.png");
+	image_studentsTurn = IMG_LoadTexture(renderer, "karty/curtain/sturn.png");
 	image_studentsPass = NULL;
-	image_studentsPass = IMG_LoadTexture(renderer, "karty/curtain/studentpass.png");
+	image_studentsPass = IMG_LoadTexture(renderer, "karty/curtain/spass.png");
+
+	image_sWonGame = NULL;
+	image_sWonGame = IMG_LoadTexture(renderer, "karty/curtain/swg.png");
+
+	image_tWonGame = NULL;
+	image_tWonGame = IMG_LoadTexture(renderer, "karty/curtain/twg.png");
 
 }
 
@@ -185,11 +244,18 @@ void Logic::showCurtain(int whichOne)
 	{
 		if (whichOne == CURTAIN_TEACHERPASS){ SDL_RenderCopy(renderer, image_teachersPass, NULL, &curtain_rect); }
 		if (whichOne == CURTAIN_STUDENTPASS){ SDL_RenderCopy(renderer, image_studentsPass, NULL, &curtain_rect); }
-		if (whichOne == CURTAIN_STUDENTTUNR){ SDL_RenderCopy(renderer, image_studentsTurn, NULL, &curtain_rect); }
+		if (whichOne == CURTAIN_STUDENTTURN){ SDL_RenderCopy(renderer, image_studentsTurn, NULL, &curtain_rect); }
 		if (whichOne == CURTAIN_TEACHERTURN){ SDL_RenderCopy(renderer, image_teachersTurn, NULL, &curtain_rect); }
 		if (whichOne == CURTAIN_STUDENTWIN){ SDL_RenderCopy(renderer, image_studentsWin, NULL, &curtain_rect); }
 		if (whichOne == CURTAIN_TEACHERWIN){ SDL_RenderCopy(renderer, image_teachersWin, NULL, &curtain_rect); }
+		if (whichOne == CURTAIN_TGAME){ SDL_RenderCopy(renderer, image_tWonGame, NULL, &curtain_rect); }
+		if (whichOne == CURTAIN_SGAME){ SDL_RenderCopy(renderer, image_sWonGame, NULL, &curtain_rect); }
 	}
+}
+
+int Logic::returnCurtain()
+{
+	return whichCurtain;
 }
 
 int Logic::getEvent(SDL_Event * e)
@@ -208,13 +274,13 @@ int Logic::getEvent(SDL_Event * e)
 				  case ' ': //spacja
 				  {
 						
-							if(!ifcurtain) playerPass();
+							if(!ifcurtain && !endGAME) playerPass();
 							break;
 
 				  }
 				  case 'y':
 				  {
-							  ifcurtain = false;
+							 ifcurtain = false;
 							  break;
 				  }
 			}
@@ -223,7 +289,7 @@ int Logic::getEvent(SDL_Event * e)
 		{
 			int x, y;
 			SDL_GetMouseState(&x, &y);
-			if (!endOfRound && !ifcurtain) // if not end of round and no curtain on screen 
+			if (!endOfRound && !ifcurtain && !endGAME) // if not end of round and no curtain on screen 
 			{
 				ifclicked(x, y);
 			}
@@ -395,8 +461,6 @@ void Logic::setOnTable(Cards * e, int whichOne)
 	}
 	reloadPoints(); // updates points if ability is used 
 	loadCounter(); // updates points
-	if (TeachersBase.size() == 0) passTeachers = true;
-	if (StudentsBase.size() == 0) passStudents = true;
 }
 
 void Logic::addPointsAfterSettingOnTable(Cards * e)
@@ -511,6 +575,7 @@ void Logic::CardWithSpyAbility(Cards * e)
 		drawOneCard(TEACHERS_TEAM);
 		drawOneCard(TEACHERS_TEAM);
 	}
+	loadCurtains(); // stops the bug which makes curtains disappear after using spy card. dunno why this is happening
 }
 
 void Logic::CardWithAllForOneAbility(Cards *e)
@@ -810,16 +875,17 @@ void Logic::deciedeWhoWinsTheRound()
 		whichCurtain = CURTAIN_TEACHERWIN;
 		cout << "wygral prowadzacy" << endl;
 		visible = TEACHERS_TEAM; // who wins has first move
-		round.whoWon = TEACHERS_TEAM;
+		TWonRounds += 1;
 	}
 	else
 	{
 		ifcurtain = true;
 		whichCurtain = CURTAIN_STUDENTWIN;
 		drawOneCard(STUDENT_TEAM); // passive, when student wins he gets one additional card
+		loadCurtains(); // repairs the bug when student win and curtain doesnt show up. dunno why
 		sizeOfStudent = StudentsBase.size();
 		visible = STUDENT_TEAM; // who wins has first move
-		round.whoWon = STUDENT_TEAM;
+		SWonRounds += 1;
 	}
 	round.students = StudentScore;
 	round.teachers = TeacherScore;
@@ -837,7 +903,6 @@ void Logic::deciedeWhoWinsTheRound()
 	TeacherScore = 0;
 
 	loadCounter();
-	
 
 	endOfRound = false;
 	passStudents = false;

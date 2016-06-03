@@ -29,9 +29,10 @@ int main(int argc, char* args[])
 		SDL_RenderClear(gwent.getRenderer());
 		gwent.showBackground();
 		gwent.showAndSetCards();
-		gwent.viewPointScore();
 		gwent.checkIfEndRound();
+		gwent.checkIfEndGame();
 	    gwent.showCurtain(gwent.returnCurtain());
+		gwent.viewPointScore();
 		SDL_RenderPresent(gwent.getRenderer());
 
 

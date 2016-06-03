@@ -32,10 +32,12 @@ const int TYPE_SIEGE = 3;
 
 const int CURTAIN_TEACHERPASS = 1;
 const int CURTAIN_STUDENTPASS = 2;
-const int CURTAIN_STUDENTTUNR = 3;
+const int CURTAIN_STUDENTTURN = 3;
 const int CURTAIN_TEACHERTURN = 4;
 const int CURTAIN_STUDENTWIN = 5;
 const int CURTAIN_TEACHERWIN = 6;
+const int CURTAIN_SGAME = 7;
+const int CURTAIN_TGAME = 8;
 
 const int ROW_TEACHERS_SIEGE = 14;
 const int ROW_TEACHERS_RANGED = 124;

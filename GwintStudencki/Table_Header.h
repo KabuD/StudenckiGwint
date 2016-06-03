@@ -25,6 +25,9 @@ protected:
 	SDL_Texture * image_studentsTurn;
 	SDL_Texture * image_studentsPass;
 
+	SDL_Texture * image_tWonGame;
+	SDL_Texture * image_sWonGame;
+
 	SDL_Texture * back;
 
 	SDL_Rect screen_rect;
