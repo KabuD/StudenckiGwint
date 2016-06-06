@@ -37,6 +37,16 @@ protected:
 	int visible; // operates which cards are visible on screen. changing on space in 'Logic'
 	int medic;
 
+	Mix_Music *gMusic1;
+	Mix_Music *gMusic2;
+	Mix_Music *gMusic3;
+
+	Mix_Chunk * chStudentWin;
+	Mix_Chunk * chTeacherWin;
+	Mix_Chunk * bond;
+	Mix_Chunk * medicSound;
+	Mix_Chunk * spy;
+	Mix_Chunk * card;
 
 	// to make sure that cards arent being moved indefinetly in loadCard func
 	bool doneStudentBase;
@@ -96,7 +106,7 @@ public:
 	SDL_Renderer * getRenderer();
 	//gets curtain on screen after certain actions
 	void loadBackgroundAndCurtains();
-
+	void playMusic();
 
 	
 };

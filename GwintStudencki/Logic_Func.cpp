@@ -113,8 +113,6 @@ void Logic::playerPass()
 			  break;
 	}
 	}
-	cout << "Curtain: " << whichCurtain << endl;
-	cout << "IfCurtain" << ifcurtain << endl;
 }
 
 void Logic::playerChange()
@@ -305,50 +303,57 @@ void Logic::ifclicked(double _x, double _y)
 	{
 	case TEACHERS_TEAM:
 	{
-						  for (int i = 0; i < TeachersBase.size(); i++)
+						  if (medic == 0)
 						  {
-							  if (medic == 0)
+							  for (int i = 0; i < TeachersBase.size(); i++)
 							  {
-
 								  if (TeachersBase[i]->getX()<_x && TeachersBase[i]->getX() + 100>_x && TeachersBase[i]->getY() < _y && TeachersBase[i]->getY() - 100 < _y)
 								  {
 									  setOnTable(TeachersBase[i], i);
-									  if(medic==0)playerChange();
+									  if (medic == 0)playerChange();
 									  break;
 								  }
 							  }
-							  if (medic == TEACHERS_TEAM)
+						  }
+						  if (medic == TEACHERS_TEAM)
+						  {
+							  for (int i = 0; i < TeachersUsed.size(); i++)
 							  {
-								  if (TeachersUsed[i]->getX()<_x && TeachersUsed[i]->getX() + 200>_x && TeachersUsed[i]->getY() < _y && TeachersUsed[i]->getY() - 200 < _y)
+								  if (TeachersUsed[i]->getX()<_x && TeachersUsed[i]->getX() + 100>_x && TeachersUsed[i]->getY() < _y && TeachersUsed[i]->getY() - 100 < _y)
 								  {
 									  setOnTable(TeachersUsed[i], i);
-                                      playerChange();
+									  playerChange();
 									  medic = 0;
 									  doneTeachersUsed = false;
 									  break;
 								  }
 							  }
 						  }
+
 						  break;
 	}
 	case STUDENT_TEAM:
 	{
-						 for (int i = 0; i < StudentsBase.size(); i++)
+						 if (medic == 0)
 						 {
-							 if (medic == 0)
+							 for (int i = 0; i < StudentsBase.size(); i++)
 							 {
-
 								 if (StudentsBase[i]->getX()<_x && StudentsBase[i]->getX() + 100>_x && StudentsBase[i]->getY() < _y && StudentsBase[i]->getY() - 100 < _y)
 								 {
 									 setOnTable(StudentsBase[i], i);
-									 if(medic==0) playerChange();
+									 if (medic == 0) playerChange();
 									 break;
 								 }
 							 }
-							 if (medic == STUDENT_TEAM)
+						 }
+						 if (medic == STUDENT_TEAM)
+						 {
+							 for (int i = 0; i < StudentsUsed.size(); i++)
 							 {
-								 if (StudentsUsed[i]->getX()<_x && StudentsUsed[i]->getX() + 200>_x && StudentsUsed[i]->getY() < _y && StudentsUsed[i]->getY() - 200 < _y)
+
+								 if (StudentsUsed[i]->getX()<_x && StudentsUsed[i]->getX() + 100>_x && StudentsUsed[i]->getY() < _y && StudentsUsed[i]->getY() - 100 < _y)
 								 {
+									 cout << "cos" << endl;
 									 setOnTable(StudentsUsed[i], i);
 									 playerChange();
 									 medic = 0;
@@ -357,9 +362,10 @@ void Logic::ifclicked(double _x, double _y)
 								 }
 							 }
 						 }
+	}
 						 break;
 	}
-	}
+	
 }
 
 void Logic::setOnTable(Cards * e, int whichOne)
@@ -704,21 +710,25 @@ void Logic::checkAbility(Cards * e)
 	{
 	case ABILITY_NONE:
 	{
+						 Mix_PlayChannel(-1, card, 0);
 						 break;
 	}
 	case ABILITY_SPY: // setting done in setOnTable func by few ifs. dunno how to make it here
 	{
 						  CardWithSpyAbility(e);
+						  Mix_PlayChannel(-1, spy, 0);
 						  break;
 	}
 	case ABILITY_ALL4ONE:
 	{
 							CardWithAllForOneAbility(e);
+
 							break;
 	}
 	case ABILITY_MEDIC:
 	{
 						  CardWithMedicAbility(e);
+						  Mix_PlayChannel(-1, medicSound, 0);
 						  break;
 	}
 	}
@@ -766,6 +776,8 @@ void Logic::CardWithAllForOneAbility(Cards *e)
 									 StudentsMelee[i]->multiplyPoints(howManyOfAKind);
 								 }
 							 }
+							 if (howManyOfAKind>0)Mix_PlayChannel(-1, bond, 0);
+							 else 	Mix_PlayChannel(-1, card, 0);
 						 }
 						 if (e->getType() == 2)
 						 {
@@ -788,6 +800,8 @@ void Logic::CardWithAllForOneAbility(Cards *e)
 									 StudentsRanged[i]->multiplyPoints(howManyOfAKind);
 								 }
 							 }
+							 if (howManyOfAKind>0)Mix_PlayChannel(-1, bond, 0);
+							 else 	Mix_PlayChannel(-1, card, 0);
 						 }
 						 if (e->getType() == 3)
 						 {
@@ -810,6 +824,8 @@ void Logic::CardWithAllForOneAbility(Cards *e)
 									 StudentsSiege[i]->multiplyPoints(howManyOfAKind);
 								 }
 							 }
+							 if (howManyOfAKind>0)Mix_PlayChannel(-1, bond, 0);
+							 else 	Mix_PlayChannel(-1, card, 0);
 						 }
 						 break;
 	}
@@ -837,6 +853,8 @@ void Logic::CardWithAllForOneAbility(Cards *e)
 									  TeachersMelee[i]->multiplyPoints(howManyOfAKind);
 								  }
 							  }
+							  if (howManyOfAKind>0)Mix_PlayChannel(-1, bond, 0);
+							  else 	Mix_PlayChannel(-1, card, 0);
 						  }
 						  if (e->getType() == 2)
 						  {
@@ -859,6 +877,8 @@ void Logic::CardWithAllForOneAbility(Cards *e)
 									  TeachersRanged[i]->multiplyPoints(howManyOfAKind);
 								  }
 							  }
+							  if (howManyOfAKind>0)Mix_PlayChannel(-1, bond, 0);
+							  else 	Mix_PlayChannel(-1, card, 0);
 						  }
 						  if (e->getType() == 3)
 						  {
@@ -881,6 +901,8 @@ void Logic::CardWithAllForOneAbility(Cards *e)
 									  TeachersSiege[i]->multiplyPoints(howManyOfAKind);
 								  }
 							  }
+							  if (howManyOfAKind>0)Mix_PlayChannel(-1, bond, 0);
+							  else 	Mix_PlayChannel(-1, card, 0);
 						  }
 						  break;
 	}
@@ -1029,8 +1051,6 @@ void Logic::giveAllFieldCardsToUsed()
 	doneTeachersUsed = false;
 	doneStudentsUsed = false;
 	showAndSetCards();
-	cout << TeachersUsed.size() << " TU" << endl;
-	cout << StudentsUsed.size() << " SU" << endl;
 }
 
 void Logic::deleteAllBonuses()
@@ -1053,9 +1073,9 @@ void Logic::deciedeWhoWinsTheRound()
 	{
 		ifcurtain = true;
 		whichCurtain = CURTAIN_TEACHERWIN;
-		cout << "wygral prowadzacy" << endl;
 		visible = TEACHERS_TEAM; // who wins has first move
 		TWonRounds += 1;
+		Mix_PlayChannel(-1, chTeacherWin, 0);
 	}
 	else
 	{
@@ -1066,6 +1086,7 @@ void Logic::deciedeWhoWinsTheRound()
 		sizeOfStudent = StudentsBase.size();
 		visible = STUDENT_TEAM; // who wins has first move
 		SWonRounds += 1;
+		Mix_PlayChannel(-1, chStudentWin, 0);
 	}
 	round.students = StudentScore;
 	round.teachers = TeacherScore;
@@ -1143,6 +1164,27 @@ Logic::~Logic()
 			TeachersUsed[i]->~Cards();
 		}
 		TeachersUsed.clear();
+
+		Mix_FreeChunk(chTeacherWin);
+		chTeacherWin = NULL;
+		Mix_FreeChunk(chTeacherWin);
+		chTeacherWin = NULL;
+		Mix_FreeChunk(medicSound);
+		medicSound = NULL;
+		Mix_FreeChunk(spy);
+		spy = NULL;
+		Mix_FreeChunk(bond);
+		bond = NULL;
+		Mix_FreeChunk(card);
+		card = NULL;
+
+		Mix_FreeMusic(gMusic1);
+		gMusic1 = NULL;
+		Mix_FreeMusic(gMusic2);
+		gMusic2 = NULL;
+		Mix_FreeMusic(gMusic3);
+		gMusic3 = NULL;
+
 		SDL_DestroyTexture(image_studentsWin);
 		SDL_DestroyTexture(image_teachersWin);
 		SDL_DestroyTexture(image_studentsPass);
@@ -1166,6 +1208,10 @@ Logic::~Logic()
 
 		SDL_DestroyWindow(window);
 		SDL_DestroyRenderer(renderer);
+
+		Mix_Quit();
+		IMG_Quit();
+		SDL_Quit();
 }
 
 

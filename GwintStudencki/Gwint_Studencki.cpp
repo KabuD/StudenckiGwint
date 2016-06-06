@@ -27,6 +27,7 @@ int main(int argc, char* args[])
 	while (gwent.getEvent(mainEvent)) // function doing all the mouse and keyboard checking as well as logic
 	{
 		SDL_RenderClear(gwent.getRenderer());
+		gwent.playMusic();
 		gwent.showBackground();
 		gwent.showAndSetCards();
 		gwent.checkIfEndRound();
