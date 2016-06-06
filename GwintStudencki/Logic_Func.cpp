@@ -307,11 +307,26 @@ void Logic::ifclicked(double _x, double _y)
 	{
 						  for (int i = 0; i < TeachersBase.size(); i++)
 						  {
-							  if (TeachersBase[i]->getX()<_x && TeachersBase[i]->getX() + 100>_x && TeachersBase[i]->getY() < _y && TeachersBase[i]->getY() - 100 < _y)
+							  if (medic == 0)
 							  {
-								  setOnTable(TeachersBase[i], i);
-								  playerChange();
-								  break;
+
+								  if (TeachersBase[i]->getX()<_x && TeachersBase[i]->getX() + 100>_x && TeachersBase[i]->getY() < _y && TeachersBase[i]->getY() - 100 < _y)
+								  {
+									  setOnTable(TeachersBase[i], i);
+									  if(medic==0)playerChange();
+									  break;
+								  }
+							  }
+							  if (medic == TEACHERS_TEAM)
+							  {
+								  if (TeachersUsed[i]->getX()<_x && TeachersUsed[i]->getX() + 200>_x && TeachersUsed[i]->getY() < _y && TeachersUsed[i]->getY() - 200 < _y)
+								  {
+									  setOnTable(TeachersUsed[i], i);
+                                      playerChange();
+									  medic = 0;
+									  doneTeachersUsed = false;
+									  break;
+								  }
 							  }
 						  }
 						  break;
@@ -320,11 +335,26 @@ void Logic::ifclicked(double _x, double _y)
 	{
 						 for (int i = 0; i < StudentsBase.size(); i++)
 						 {
-							 if (StudentsBase[i]->getX()<_x && StudentsBase[i]->getX() + 100>_x && StudentsBase[i]->getY() < _y && StudentsBase[i]->getY() - 100 < _y)
+							 if (medic == 0)
 							 {
-								 setOnTable(StudentsBase[i], i);
-								 playerChange();
-								 break;
+
+								 if (StudentsBase[i]->getX()<_x && StudentsBase[i]->getX() + 100>_x && StudentsBase[i]->getY() < _y && StudentsBase[i]->getY() - 100 < _y)
+								 {
+									 setOnTable(StudentsBase[i], i);
+									 if(medic==0) playerChange();
+									 break;
+								 }
+							 }
+							 if (medic == STUDENT_TEAM)
+							 {
+								 if (StudentsUsed[i]->getX()<_x && StudentsUsed[i]->getX() + 200>_x && StudentsUsed[i]->getY() < _y && StudentsUsed[i]->getY() - 200 < _y)
+								 {
+									 setOnTable(StudentsUsed[i], i);
+									 playerChange();
+									 medic = 0;
+									 doneStudentsUsed = false;
+									 break;
+								 }
 							 }
 						 }
 						 break;
@@ -336,129 +366,260 @@ void Logic::setOnTable(Cards * e, int whichOne)
 {
 	checkAbility(e); 
 
-	switch (e->getMembership())
+	if (medic == 0 || e->getAbility() == ABILITY_MEDIC)
 	{
-	case STUDENT_TEAM:
-	{
-						 if (e->getType() == TYPE_MELEE)
-						 {
-							 if (e->getAbility() != ABILITY_SPY)
+		switch (e->getMembership())
+		{
+		case STUDENT_TEAM:
+		{
+							 if (e->getType() == TYPE_MELEE)
 							 {
-								 StudentsMelee.push_back(e);
-								 doneStudentsMelee = false;
-								 addPointsAfterSettingOnTable(e);
+								 if (e->getAbility() != ABILITY_SPY)
+								 {
+									 StudentsMelee.push_back(e);
+									 doneStudentsMelee = false;
+									 addPointsAfterSettingOnTable(e);
+								 }
+								 else
+								 {
+									 e->changeMembership();
+									 TeachersMelee.push_back(e);
+									 doneTeachersMelee = false;
+									 addPointsAfterSettingOnTable(e);
+								 }
+								 StudentsBase.erase(StudentsBase.begin() + whichOne);
+								 doneStudentBase = false;
 							 }
-							 else
+							 if (e->getType() == TYPE_RANGED)
 							 {
-								 e->changeMembership();
-								 TeachersMelee.push_back(e);
-								 doneTeachersMelee = false;
-								 addPointsAfterSettingOnTable(e);
+								 if (e->getAbility() != ABILITY_SPY)
+								 {
+									 StudentsRanged.push_back(e);
+									 doneStudentsRanged = false;
+									 addPointsAfterSettingOnTable(e);
+								 }
+								 else
+								 {
+									 e->changeMembership();
+									 TeachersRanged.push_back(e);
+									 doneTeachersRanged = false;
+									 addPointsAfterSettingOnTable(e);
+								 }
+								 StudentsBase.erase(StudentsBase.begin() + whichOne);
+								 doneStudentBase = false;
 							 }
-							 StudentsBase.erase(StudentsBase.begin() + whichOne);
-							 doneStudentBase = false;
-						 }
-						 if (e->getType() == TYPE_RANGED)
-						 {
-							 if (e->getAbility() != ABILITY_SPY)
+							 if (e->getType() == TYPE_SIEGE)
 							 {
-								 StudentsRanged.push_back(e);
-								 doneStudentsRanged = false;
-								 addPointsAfterSettingOnTable(e);
+								 if (e->getAbility() != ABILITY_SPY)
+								 {
+									 StudentsSiege.push_back(e);
+									 doneStudentsSiege = false;
+									 addPointsAfterSettingOnTable(e);
+								 }
+								 else
+								 {
+									 e->changeMembership();
+									 TeachersSiege.push_back(e);
+									 doneTeachersSiege = false;
+									 addPointsAfterSettingOnTable(e);
+								 }
+								 StudentsBase.erase(StudentsBase.begin() + whichOne);
+								 doneStudentBase = false;
 							 }
-							 else
-							 {
-								 e->changeMembership();
-								 TeachersRanged.push_back(e);
-								 doneTeachersRanged = false;
-								 addPointsAfterSettingOnTable(e);
-							 }
-							 StudentsBase.erase(StudentsBase.begin() + whichOne);
-							 doneStudentBase = false;
-						 }
-						 if (e->getType() == TYPE_SIEGE)
-						 {
-							 if (e->getAbility() != ABILITY_SPY)
-							 {
-								 StudentsSiege.push_back(e);
-								 doneStudentsSiege = false;
-								 addPointsAfterSettingOnTable(e);
-							 }
-							 else
-							 {
-								 e->changeMembership();
-								 TeachersSiege.push_back(e);
-								 doneTeachersSiege = false;
-								 addPointsAfterSettingOnTable(e);
-							 }
-							 StudentsBase.erase(StudentsBase.begin() + whichOne);
-							 doneStudentBase = false;
-						 }
-						 sizeOfStudent = StudentsBase.size();
-						 break;
+							 sizeOfStudent = StudentsBase.size();
+							 break;
 
-	}
-	case TEACHERS_TEAM:
-	{
+		}
+		case TEACHERS_TEAM:
+		{
 
-						  if (e->getType() == TYPE_MELEE)
-						  {
-							  if (e->getAbility() != ABILITY_SPY)
+							  if (e->getType() == TYPE_MELEE)
 							  {
-								  TeachersMelee.push_back(e);
-								  doneTeachersMelee = false;
-								  addPointsAfterSettingOnTable(e);
+								  if (e->getAbility() != ABILITY_SPY)
+								  {
+									  TeachersMelee.push_back(e);
+									  doneTeachersMelee = false;
+									  addPointsAfterSettingOnTable(e);
+								  }
+								  else
+								  {
+									  e->changeMembership();
+									  StudentsMelee.push_back(e);
+									  doneTeachersMelee = false;
+									  addPointsAfterSettingOnTable(e);
+								  }
+								  TeachersBase.erase(TeachersBase.begin() + whichOne);
+								  doneTeachersBase = false;
 							  }
-							  else
+							  if (e->getType() == TYPE_RANGED)
 							  {
-								  e->changeMembership();
-								  StudentsMelee.push_back(e);
-								  doneTeachersMelee = false;
-								  addPointsAfterSettingOnTable(e);
+								  if (e->getAbility() != ABILITY_SPY)
+								  {
+									  TeachersRanged.push_back(e);
+									  doneTeachersRanged = false;
+									  addPointsAfterSettingOnTable(e);
+								  }
+								  else
+								  {
+									  e->changeMembership();
+									  StudentsRanged.push_back(e);
+									  doneStudentsRanged = false;
+									  addPointsAfterSettingOnTable(e);
+								  }
+								  TeachersBase.erase(TeachersBase.begin() + whichOne);
+								  doneTeachersBase = false;
 							  }
-							  TeachersBase.erase(TeachersBase.begin() + whichOne);
-							  doneTeachersBase = false;
-						  }
-						  if (e->getType() == TYPE_RANGED)
-						  {
-							  if (e->getAbility() != ABILITY_SPY)
+							  if (e->getType() == TYPE_SIEGE)
 							  {
-								  TeachersRanged.push_back(e);
-								  doneTeachersRanged = false;
-								  addPointsAfterSettingOnTable(e);
+								  if (e->getAbility() != ABILITY_SPY)
+								  {
+									  TeachersSiege.push_back(e);
+									  doneTeachersSiege = false;
+									  addPointsAfterSettingOnTable(e);
+								  }
+								  else
+								  {
+									  e->changeMembership();
+									  StudentsSiege.push_back(e);
+									  doneStudentsSiege = false;
+									  addPointsAfterSettingOnTable(e);
+								  }
+								  TeachersBase.erase(TeachersBase.begin() + whichOne);
+								  doneTeachersBase = false;
 							  }
-							  else
-							  {
-								  e->changeMembership();
-								  StudentsRanged.push_back(e);
-								  doneStudentsRanged = false;
-								  addPointsAfterSettingOnTable(e);
-							  }
-							  TeachersBase.erase(TeachersBase.begin() + whichOne);
-							  doneTeachersBase = false;
-						  }
-						  if (e->getType() == TYPE_SIEGE)
-						  {
-							  if (e->getAbility() != ABILITY_SPY)
-							  {
-								  TeachersSiege.push_back(e);
-								  doneTeachersSiege = false;
-								  addPointsAfterSettingOnTable(e);
-							  }
-							  else
-							  {
-								  e->changeMembership();
-								  StudentsSiege.push_back(e);
-								  doneStudentsSiege = false;
-								  addPointsAfterSettingOnTable(e);
-							  }
-							  TeachersBase.erase(TeachersBase.begin() + whichOne);
-							  doneTeachersBase = false;
-						  }
-						  sizeOfTeacher = TeachersBase.size();
-						  break;
+							  sizeOfTeacher = TeachersBase.size();
+							  break;
+		}
+		}
 	}
+	if (medic && e->getAbility() != ABILITY_MEDIC)
+	{
+		switch (e->getMembership())
+		{
+		case STUDENT_TEAM:
+		{
+							 if (e->getType() == TYPE_MELEE)
+							 {
+								 if (e->getAbility() != ABILITY_SPY)
+								 {
+									 StudentsMelee.push_back(e);
+									 doneStudentsMelee = false;
+									 addPointsAfterSettingOnTable(e);
+								 }
+								 else
+								 {
+									 e->changeMembership();
+									 TeachersMelee.push_back(e);
+									 doneTeachersMelee = false;
+									 addPointsAfterSettingOnTable(e);
+								 }
+								 StudentsUsed.erase(StudentsUsed.begin() + whichOne);
+								 doneStudentsUsed = false;
+							 }
+							 if (e->getType() == TYPE_RANGED)
+							 {
+								 if (e->getAbility() != ABILITY_SPY)
+								 {
+									 StudentsRanged.push_back(e);
+									 doneStudentsRanged = false;
+									 addPointsAfterSettingOnTable(e);
+								 }
+								 else
+								 {
+									 e->changeMembership();
+									 TeachersRanged.push_back(e);
+									 doneTeachersRanged = false;
+									 addPointsAfterSettingOnTable(e);
+								 }
+								 StudentsUsed.erase(StudentsUsed.begin() + whichOne);
+								 doneStudentsUsed = false;
+							 }
+							 if (e->getType() == TYPE_SIEGE)
+							 {
+								 if (e->getAbility() != ABILITY_SPY)
+								 {
+									 StudentsSiege.push_back(e);
+									 doneStudentsSiege = false;
+									 addPointsAfterSettingOnTable(e);
+								 }
+								 else
+								 {
+									 e->changeMembership();
+									 TeachersSiege.push_back(e);
+									 doneTeachersSiege = false;
+									 addPointsAfterSettingOnTable(e);
+								 }
+								 StudentsUsed.erase(StudentsUsed.begin() + whichOne);
+								 doneStudentsUsed = false;
+							 }
+							 sizeOfStudent = StudentsBase.size();
+							 break;
+
+		}
+		case TEACHERS_TEAM:
+		{
+
+							  if (e->getType() == TYPE_MELEE)
+							  {
+								  if (e->getAbility() != ABILITY_SPY)
+								  {
+									  TeachersMelee.push_back(e);
+									  doneTeachersMelee = false;
+									  addPointsAfterSettingOnTable(e);
+								  }
+								  else
+								  {
+									  e->changeMembership();
+									  StudentsMelee.push_back(e);
+									  doneTeachersMelee = false;
+									  addPointsAfterSettingOnTable(e);
+								  }
+								  TeachersUsed.erase(TeachersUsed.begin() + whichOne);
+								  doneTeachersUsed = false;
+							  }
+							  if (e->getType() == TYPE_RANGED)
+							  {
+								  if (e->getAbility() != ABILITY_SPY)
+								  {
+									  TeachersRanged.push_back(e);
+									  doneTeachersRanged = false;
+									  addPointsAfterSettingOnTable(e);
+								  }
+								  else
+								  {
+									  e->changeMembership();
+									  StudentsRanged.push_back(e);
+									  doneStudentsRanged = false;
+									  addPointsAfterSettingOnTable(e);
+								  }
+								  TeachersUsed.erase(TeachersUsed.begin() + whichOne);
+								  doneTeachersUsed = false;
+							  }
+							  if (e->getType() == TYPE_SIEGE)
+							  {
+								  if (e->getAbility() != ABILITY_SPY)
+								  {
+									  TeachersSiege.push_back(e);
+									  doneTeachersSiege = false;
+									  addPointsAfterSettingOnTable(e);
+								  }
+								  else
+								  {
+									  e->changeMembership();
+									  StudentsSiege.push_back(e);
+									  doneStudentsSiege = false;
+									  addPointsAfterSettingOnTable(e);
+								  }
+								  TeachersUsed.erase(TeachersUsed.begin() + whichOne);
+								  doneTeachersUsed = false;
+							  }
+							  sizeOfTeacher = TeachersBase.size();
+							  break;
+		}
+		}
 	}
+
+	
 	reloadPoints(); // updates points if ability is used 
 	loadCounter(); // updates points
 }
@@ -557,7 +718,7 @@ void Logic::checkAbility(Cards * e)
 	}
 	case ABILITY_MEDIC:
 	{
-						  //TODO
+						  CardWithMedicAbility(e);
 						  break;
 	}
 	}
@@ -721,6 +882,25 @@ void Logic::CardWithAllForOneAbility(Cards *e)
 								  }
 							  }
 						  }
+						  break;
+	}
+	}
+}
+
+void Logic::CardWithMedicAbility(Cards *e)
+{
+	switch (e->getMembership())
+	{
+	case STUDENT_TEAM:
+	{
+						if(StudentsUsed.size()) medic = STUDENT_TEAM; // if its not empty
+						 doneStudentsUsed = false;
+						 break;
+	}
+	case TEACHERS_TEAM:
+	{
+					if(TeachersUsed.size())	  medic = TEACHERS_TEAM; // if its not empty
+						  doneTeachersUsed = false;
 						  break;
 	}
 	}

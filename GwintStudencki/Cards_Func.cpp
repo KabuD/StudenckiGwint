@@ -2,14 +2,8 @@
 
 Cards::Cards(int _index, string _path, int _points, int _type, int _membership, int _ability)
 {
-	card_rect.x = 0;
-	card_rect.y = 0;
-	card_rect.h = 100;
-	card_rect.w = 100;
-	point_rect.x = 0;
-	point_rect.y = 0;
-	point_rect.w = 30;
-	point_rect.h= 30;
+	card_rect = { 0, 0, 100, 100 };
+	point_rect = { 0, 0, 30, 30 };
 	ability_rect = { 0, 0, 30, 30 };
 	type_rect = { 0, 0, 30, 30 };
 
@@ -135,4 +129,20 @@ int Cards::getPoints()
 int Cards::getAbility()
 {
 	return ability;
+}
+
+void Cards::maximizeCard()
+{
+	if (ability)ability_rect = { 0, 0, 60, 60 };
+	point_rect = { 0, 0, 60, 60 };
+	type_rect = { 0, 0, 60, 60 };
+	card_rect = { 0, 0, 200, 200 };
+}
+
+void Cards::normalizeCard()
+{
+	if (ability)	ability_rect = { 0, 0, 30, 30 };
+	card_rect = { 0, 0, 100, 100 };
+	point_rect = { 0, 0, 30, 30 };
+	type_rect = { 0, 0, 30, 30 };
 }

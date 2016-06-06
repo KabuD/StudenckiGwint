@@ -116,6 +116,8 @@ public:
 	void CardWithSpyAbility(Cards * e);
 	//what happens when checkAbility confirms ALL4ONE
 	void CardWithAllForOneAbility(Cards *e);
+    //what happens when checkability confirms MEDIC
+	void CardWithMedicAbility(Cards *e);
 	//loads all surfaces and textures for counters
 	void loadCounter();
 	// tells score in the end of a round

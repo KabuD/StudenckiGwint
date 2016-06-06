@@ -35,6 +35,7 @@ protected:
 
 	int whosTurn; // operates which team can use the card
 	int visible; // operates which cards are visible on screen. changing on space in 'Logic'
+	int medic;
 
 
 	// to make sure that cards arent being moved indefinetly in loadCard func
