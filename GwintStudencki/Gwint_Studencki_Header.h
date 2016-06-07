@@ -15,7 +15,7 @@
 using namespace std;
 
 const int WINDOW_WIDTH=1280;
-const int WINDOW_HEIGHT=820;
+const int WINDOW_HEIGHT=830;
 const int WINDOW_x=100;
 const int WINDOW_y=-100;
 

@@ -577,7 +577,7 @@ void Logic::setOnTable(Cards * e, int whichOne)
 								  {
 									  e->changeMembership();
 									  StudentsMelee.push_back(e);
-									  doneTeachersMelee = false;
+									  doneStudentsMelee = false;
 									  addPointsAfterSettingOnTable(e);
 								  }
 								  TeachersUsed.erase(TeachersUsed.begin() + whichOne);

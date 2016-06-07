@@ -64,7 +64,7 @@ void Cards::loadPoints(SDL_Renderer * _renderer)
 	}
 }
 
-void Cards::changePosInRow(double _x)
+void Cards::changePosInRow(int _x)
 {
 	card_rect.x = _x;
 	point_rect.x = _x;
@@ -72,7 +72,7 @@ void Cards::changePosInRow(double _x)
 	type_rect.x = _x;
 }
 
-void Cards::changeRow(double _y)
+void Cards::changeRow(int _y)
 {
 	card_rect.y = _y;
 	point_rect.y = _y;
